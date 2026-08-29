@@ -1,8 +1,13 @@
 # Design
 
 Sistema visual de Fieltromanía, documentado desde el código que corre.
-Derivado del logo existente: un libro abierto en trazo negro grueso con tres
-estrellas planas — morada, verde y naranja.
+Derivado del logo: tres estrellas planas de fieltro — morada, verde y naranja.
+
+**El logo cambió el 2026-08-30.** Antes era un libro abierto en trazo negro
+grueso con las tres estrellas encima; la marca decidió quedarse solo con las
+estrellas. El sistema visual no se rehace por eso: el morado sigue siendo
+primario, los radios siguen siendo redondos y el trazo negro sigue siendo la
+firma. Lo que cambia es de dónde viene esa firma — ver «El trazo negro».
 
 **Fuente de verdad: `src/app/globals.css`.** Este documento describe lo que hay
 ahí; si difieren, gana el CSS.
@@ -37,8 +42,14 @@ gráfica sin ser fría (hay color y forma, no solo aire blanco), artesanal sin s
 kitsch (geometría precisa en vez de texturas y manuscritas), y distintiva sin
 ser plantilla.
 
-**El trazo negro es la firma.** En la tienda reemplaza a las sombras suaves, que
-quedan prohibidas. Es lo que hace que el sitio se lea como el logo.
+**El trazo negro es la firma.** En la tienda reemplaza a las sombras suaves,
+que quedan prohibidas.
+
+Nació como una lectura del contorno del libro del logo original. Al retirarse
+el libro, el trazo dejó de heredarse del logotipo y pasó a ser una elección del
+sistema, que se sostiene por sí sola: es lo que separa este sitio del
+minimalismo frío de startup y de la plantilla de tienda genérica, las dos
+anti-referencias de PRODUCT.md. **El logo ya no lo lleva; el sitio sí.**
 
 **Tema por defecto: claro.** Escena: una madre en el sofá a las 22:30, teléfono
 en mano, el living a media luz, mirando fotos de un libro de fieltro que vio en
@@ -227,7 +238,10 @@ Escala semántica, nunca valores arbitrarios:
 en sintonía con el tema resuelto: `viewport.themeColor` solo admite
 `prefers-color-scheme`, que sigue al sistema operativo y no al conmutador.
 
-`logo.tsx` (isotipo y logotipo, SVG que responde al tema), `escena-fieltro.tsx`
+`logo.tsx` (las tres estrellas y el logotipo; los colores salen de los tokens,
+así que conservan su fuerza en tema oscuro sin repintar nada. El `viewBox` está
+calculado sobre los límites reales incluyendo el trazo redondeado, que ensancha
+cada estrella media pincelada por lado), `escena-fieltro.tsx`
 (ilustración del arcoíris de la portada), `iconos-redes.tsx` (SVG propios:
 lucide retiró los logotipos de terceros).
 

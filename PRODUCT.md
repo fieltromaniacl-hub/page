@@ -83,8 +83,10 @@ Añado una quinta por criterio propio:
 
 ## Design Principles
 
-1. **El logo ya era el sistema.** Trazo negro grueso más tres colores planos. Todo el sitio se
-   deriva de ahí en vez de inventar una identidad paralela.
+1. **El logo ya era el sistema.** Tres colores planos que ordenan todo el sitio, en vez de
+   inventar una identidad paralela. El logo se redujo a las tres estrellas el 2026-08-30; el
+   trazo negro grueso sigue siendo la firma del sitio, ahora como decisión propia del sistema
+   visual y no como herencia del logotipo.
 
 2. **La foto del fieltro es el color.** El producto es intensamente colorido y texturado. La
    interfaz se mantiene gráfica y plana para no competir con él; el color de marca estructura, las
