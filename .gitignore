@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Capturas de verificación de Playwright
+.playwright-mcp/
+
+# La plantilla sí se versiona: no lleva valores
+!.env.example

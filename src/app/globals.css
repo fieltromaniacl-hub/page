@@ -1,26 +1,205 @@
 @import "tailwindcss";
 
+/* next-themes conmuta con clase, no con media query */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================================
+   Tokens — Fieltromanía
+   Derivados del logo: trazo negro grueso + tres estrellas planas.
+   Espacio OKLCH. Ver DESIGN.md.
+   ============================================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Superficies — blanco con el tinte lila mínimo. Nunca crema. */
+  --bg: oklch(0.985 0.004 292);
+  --surface: oklch(1 0 0);
+  --surface-2: oklch(0.963 0.009 292);
+
+  /* Tinta — el trazo del logo. Negro cálido violáceo, nunca #000. */
+  --ink: oklch(0.17 0.022 292);
+  --ink-muted: oklch(0.44 0.021 292);
+  --line: oklch(0.17 0.022 292);
+  --line-soft: oklch(0.885 0.012 292);
+
+  /* Morado — primario. Estrella grande del logo. */
+  --violeta: oklch(0.62 0.14 288);
+  --violeta-txt: oklch(0.45 0.17 288);
+  --violeta-tenue: oklch(0.945 0.03 288);
+
+  /* Verde — confianza, disponibilidad, sostenible. */
+  --verde: oklch(0.7 0.13 165);
+  --verde-txt: oklch(0.45 0.11 165);
+  --verde-tenue: oklch(0.945 0.035 165);
+
+  /* Naranja — acento y acción. El más escaso. */
+  --naranja: oklch(0.76 0.15 62);
+  --naranja-txt: oklch(0.52 0.14 52);
+  --naranja-tenue: oklch(0.945 0.04 70);
+
+  /* Rojo — solo errores y agotado. Fuera de la paleta de marca. */
+  --alerta: oklch(0.58 0.19 25);
+  --alerta-tenue: oklch(0.95 0.03 25);
+}
+
+.dark {
+  --bg: oklch(0.185 0.022 292);
+  --surface: oklch(0.235 0.026 292);
+  --surface-2: oklch(0.288 0.028 292);
+
+  /* En oscuro el trazo se invierte: la firma gráfica se mantiene. */
+  --ink: oklch(0.96 0.008 292);
+  --ink-muted: oklch(0.735 0.018 292);
+  --line: oklch(0.96 0.008 292);
+  --line-soft: oklch(0.35 0.03 292);
+
+  --violeta: oklch(0.74 0.13 288);
+  --violeta-txt: oklch(0.82 0.11 288);
+  --violeta-tenue: oklch(0.315 0.055 288);
+
+  --verde: oklch(0.78 0.13 165);
+  --verde-txt: oklch(0.85 0.1 165);
+  --verde-tenue: oklch(0.3 0.05 165);
+
+  --naranja: oklch(0.8 0.14 62);
+  --naranja-txt: oklch(0.86 0.12 62);
+  --naranja-tenue: oklch(0.32 0.06 62);
+
+  --alerta: oklch(0.72 0.16 25);
+  --alerta-tenue: oklch(0.32 0.07 25);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
+
+  --color-violeta: var(--violeta);
+  --color-violeta-txt: var(--violeta-txt);
+  --color-violeta-tenue: var(--violeta-tenue);
+
+  --color-verde: var(--verde);
+  --color-verde-txt: var(--verde-txt);
+  --color-verde-tenue: var(--verde-tenue);
+
+  --color-naranja: var(--naranja);
+  --color-naranja-txt: var(--naranja-txt);
+  --color-naranja-tenue: var(--naranja-tenue);
+
+  --color-alerta: var(--alerta);
+  --color-alerta-tenue: var(--alerta-tenue);
+
+  --font-display: var(--font-gabarito), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+
+  /* Radios — la redondez viene del logo */
+  --radius-control: 12px;
+  --radius-card: 20px;
+  --radius-pill: 999px;
+
+  /* Elevación por trazo desplazado, no por sombra difusa */
+  --shadow-solida: 3px 3px 0 0 var(--line);
+  --shadow-solida-lg: 6px 6px 0 0 var(--line);
+  --shadow-solida-0: 0 0 0 0 var(--line);
+
+  /* Curvas exponenciales, sin rebote */
+  --ease-salida: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-salida-fuerte: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Escala tipográfica modular, razón 1.25, fluida */
+  --text-display: clamp(2.5rem, 1.4rem + 5.5vw, 4.5rem);
+  --text-titulo: clamp(1.95rem, 1.2rem + 3.2vw, 3rem);
+  --text-seccion: clamp(1.5rem, 1.15rem + 1.6vw, 2rem);
+  --text-sub: clamp(1.2rem, 1.05rem + 0.7vw, 1.5rem);
 }
 
-@media (prefers-color-scheme: dark) {
+/* Escala semántica de capas. Nunca valores arbitrarios. */
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --z-dropdown: 10;
+    --z-sticky: 20;
+    --z-backdrop: 30;
+    --z-modal: 40;
+    --z-toast: 50;
+    --z-tooltip: 60;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Foco grueso y negro: coherente con el trazo de la marca */
+  :focus-visible {
+    outline: 3px solid var(--violeta);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background-color: var(--naranja);
+    color: oklch(0.17 0.022 292);
+  }
+
+  /* Placeholder al mismo 4.5:1 que el cuerpo, no gris claro */
+  ::placeholder {
+    color: var(--ink-muted);
+    opacity: 1;
+  }
+
+  /* Imagen siempre contenida */
+  img,
+  svg,
+  video {
+    max-width: 100%;
+    height: auto;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
