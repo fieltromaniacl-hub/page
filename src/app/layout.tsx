@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Gabarito, Hanken_Grotesk } from "next/font/google";
 
 import { ThemeProvider } from "@/components/theme-provider";
+import { urlSitio } from "@/lib/utils";
 import "./globals.css";
 
 const gabarito = Gabarito({
@@ -16,7 +17,7 @@ const hanken = Hanken_Grotesk({
   display: "swap",
 });
 
-const sitioUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://fieltromania.cl";
+const sitioUrl = urlSitio();
 
 export const metadata: Metadata = {
   metadataBase: new URL(sitioUrl),

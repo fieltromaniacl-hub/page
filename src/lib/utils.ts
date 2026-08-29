@@ -13,3 +13,15 @@ export function formatearPrecio(valor: number) {
     maximumFractionDigits: 0,
   }).format(valor);
 }
+
+/**
+ * URL base del sitio, siempre sin barra final.
+ *
+ * Sin normalizar, un `NEXT_PUBLIC_SITE_URL` terminado en «/» produce enlaces
+ * con doble barra («sitio.cl//productos»), que los buscadores tratan como una
+ * dirección distinta de la real y reparten la autoridad entre ambas.
+ */
+export function urlSitio() {
+  const bruta = process.env.NEXT_PUBLIC_SITE_URL ?? "https://fieltromania.cl";
+  return bruta.replace(/\/+$/, "");
+}

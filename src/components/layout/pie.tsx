@@ -6,10 +6,10 @@ const COLUMNAS = [
   {
     titulo: "Tienda",
     enlaces: [
-      { href: "/libros", texto: "Libros personalizados" },
+      { href: "/productos?categoria=libros-personalizados", texto: "Libros personalizados" },
       { href: "/productos", texto: "Catálogo completo" },
-      { href: "/productos/letreros", texto: "Letreros" },
-      { href: "/productos/recuerdos", texto: "Recuerdos para eventos" },
+      { href: "/productos?categoria=letreros", texto: "Letreros" },
+      { href: "/productos?categoria=recuerdos", texto: "Recuerdos para eventos" },
     ],
   },
   {

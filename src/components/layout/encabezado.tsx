@@ -1,15 +1,16 @@
 "use client";
 
-import { Menu, ShoppingBag, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
 import { LogoConNombre } from "@/components/marca/logo";
+import { BotonCarrito } from "@/components/tienda/boton-carrito";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const NAVEGACION = [
-  { href: "/libros", texto: "Libros personalizados" },
+  { href: "/productos?categoria=libros-personalizados", texto: "Libros" },
   { href: "/productos", texto: "Catálogo" },
   { href: "/como-funciona", texto: "Cómo funciona" },
   { href: "/nosotros", texto: "Quiénes somos" },
@@ -47,13 +48,7 @@ export function Encabezado() {
         <div className={cn("flex items-center gap-2", "lg:ml-0 ml-auto")}>
           <ThemeToggle />
 
-          <Link
-            href="/carrito"
-            aria-label="Ver carrito de compra"
-            className="relative grid size-11 shrink-0 place-items-center rounded-pill border-2 border-line bg-surface text-ink transition-[background-color,box-shadow,translate] duration-200 ease-[var(--ease-salida)] hover:-translate-y-0.5 hover:bg-naranja-tenue hover:shadow-solida motion-reduce:hover:translate-y-0"
-          >
-            <ShoppingBag className="size-5" strokeWidth={2.5} aria-hidden="true" />
-          </Link>
+          <BotonCarrito />
 
           <button
             type="button"

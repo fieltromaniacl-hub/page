@@ -1,8 +1,6 @@
 import { Hand, Leaf, Sparkles } from "lucide-react";
 import Link from "next/link";
 
-import { Encabezado } from "@/components/layout/encabezado";
-import { Pie } from "@/components/layout/pie";
 import { EscenaFieltro } from "@/components/marca/escena-fieltro";
 import { botonVariants } from "@/components/ui/boton";
 import { cn } from "@/lib/utils";
@@ -73,9 +71,6 @@ const PASOS = [
 export default function Inicio() {
   return (
     <>
-      <Encabezado />
-
-      <main id="contenido" className="flex-1">
         {/* Portada */}
         <section className="mx-auto grid max-w-[76rem] items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:py-20">
           <div>
@@ -95,7 +90,7 @@ export default function Inicio() {
 
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                href="/libros"
+                href="/productos?categoria=libros-personalizados"
                 className={cn(botonVariants({ tamano: "lg" }))}
               >
                 Ver los libros
@@ -235,9 +230,6 @@ export default function Inicio() {
             </div>
           </div>
         </section>
-      </main>
-
-      <Pie />
     </>
   );
 }
