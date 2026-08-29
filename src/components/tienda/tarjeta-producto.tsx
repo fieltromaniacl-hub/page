@@ -52,7 +52,7 @@ export function TarjetaProducto({
             <p className="font-display text-sm font-bold text-violeta-txt">{edad}</p>
           ) : null}
 
-          <h3 className="mt-1 font-display text-lg font-bold leading-tight tracking-tight text-ink">
+          <h3 className="mt-1 font-display text-lg font-bold leading-tight tracking-tight text-ink [overflow-wrap:break-word]">
             {producto.nombre}
           </h3>
 

@@ -43,7 +43,7 @@ const clasePildora = (activo: boolean) =>
   cn(
     "inline-flex min-h-11 items-center rounded-pill border-2 border-line px-4 font-display text-sm font-bold transition-[background-color,translate,box-shadow] duration-200 ease-[var(--ease-salida)]",
     activo
-      ? "bg-violeta text-[oklch(0.17_0.022_292)]"
+      ? "bg-violeta text-ink-fijo"
       : "bg-surface text-ink hover:-translate-y-0.5 hover:bg-violeta-tenue hover:shadow-solida motion-reduce:hover:translate-y-0",
   );
 
@@ -76,7 +76,7 @@ export default async function Catalogo({
 
   return (
     <div className="mx-auto max-w-[76rem] px-4 py-10 sm:px-6 lg:py-14">
-      <h1 className="text-[length:var(--text-titulo)] leading-[1.05]">
+      <h1 className="text-[length:var(--text-titulo)] leading-[1.05] [overflow-wrap:break-word]">
         {categoriaActiva ? categoriaActiva.nombre : "Todo lo que hacemos"}
       </h1>
       <p className="mt-3 max-w-[60ch] text-ink-muted">
@@ -165,7 +165,7 @@ export default async function Catalogo({
           {hayFiltros ? (
             <Link
               href="/productos"
-              className="mt-6 inline-flex min-h-12 items-center rounded-control border-2 border-line bg-naranja px-5 font-display font-bold text-[oklch(0.17_0.022_292)]"
+              className="mt-6 inline-flex min-h-12 items-center rounded-control border-2 border-line bg-naranja px-5 font-display font-bold text-ink-fijo"
             >
               Ver todo el catálogo
             </Link>

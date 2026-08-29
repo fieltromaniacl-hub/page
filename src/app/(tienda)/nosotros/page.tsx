@@ -82,7 +82,7 @@ export default function Nosotros() {
       <p>
         <Link
           href="/productos"
-          className="inline-flex min-h-12 items-center rounded-control border-2 border-line bg-naranja px-5 font-display font-bold text-[oklch(0.17_0.022_292)]"
+          className="inline-flex min-h-12 items-center rounded-control border-2 border-line bg-naranja px-5 font-display font-bold text-ink-fijo"
         >
           Ver lo que hacemos
         </Link>

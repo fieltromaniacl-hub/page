@@ -54,12 +54,12 @@ export function Pie() {
               <h2 className="font-display text-base font-bold tracking-tight text-ink">
                 {columna.titulo}
               </h2>
-              <ul className="mt-3 space-y-1">
+              <ul className="mt-2">
                 {columna.enlaces.map((enlace) => (
                   <li key={enlace.href}>
                     <Link
                       href={enlace.href}
-                      className="inline-flex min-h-9 items-center text-ink-muted transition-colors hover:text-violeta-txt"
+                      className="inline-flex min-h-11 items-center text-ink-muted transition-colors hover:text-violeta-txt"
                     >
                       {enlace.texto}
                     </Link>

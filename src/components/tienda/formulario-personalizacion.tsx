@@ -2,10 +2,15 @@
 
 import { Check, ShoppingBag } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
+import {
+  AreaTexto,
+  Campo,
+  Entrada,
+  GrupoOpciones,
+} from "@/components/tienda/campos";
 import { usarCarrito } from "@/lib/carrito/tienda";
-import { cn } from "@/lib/utils";
 
 type TipoCampo = "texto" | "parrafo" | "opcion" | "color" | "numero";
 
@@ -42,8 +47,7 @@ const MUESTRAS: Record<string, string> = {
   fucsia: "#E0479E",
 };
 
-const claseControl =
-  "w-full min-h-12 rounded-control border-2 border-line bg-surface px-3 py-2 text-ink transition-shadow duration-150 placeholder:text-ink-muted focus:outline-none focus:ring-4 focus:ring-violeta/30 aria-[invalid=true]:border-alerta";
+const esGrupo = (tipo: TipoCampo) => tipo === "opcion" || tipo === "color";
 
 export function FormularioPersonalizacion({
   producto,
@@ -63,8 +67,14 @@ export function FormularioPersonalizacion({
 
   const [respuestas, setRespuestas] = useState<Record<string, string>>({});
   const [errores, setErrores] = useState<Record<string, string>>({});
-  const [cantidad, setCantidad] = useState(1);
+  // Se guarda como texto para que se pueda borrar y reescribir; el número se
+  // interpreta al enviar. Con un número forzado, borrar el campo lo devolvía
+  // a 1 de un salto y no se podía teclear «12».
+  const [cantidad, setCantidad] = useState("1");
   const [agregado, setAgregado] = useState(false);
+
+  /** Un destino de foco por campo, para aterrizar en el primero con problema. */
+  const primerosDeGrupo = useRef<Record<string, HTMLButtonElement | null>>({});
 
   const agotado = producto.stock === "agotado";
 
@@ -94,9 +104,16 @@ export function FormularioPersonalizacion({
 
     if (Object.keys(nuevos).length) {
       setErrores(nuevos);
-      // Lleva el foco al primer campo con problema.
+      // Lleva el foco al primer campo con problema. Un grupo de opciones no es
+      // un control enfocable: hay que aterrizar en su primer botón.
       const primero = campos.find((c) => nuevos[c.etiqueta]);
-      if (primero) document.getElementById(`campo-${primero.id}`)?.focus();
+      if (primero) {
+        if (esGrupo(primero.tipo)) {
+          primerosDeGrupo.current[primero.id]?.focus();
+        } else {
+          document.getElementById(`campo-${primero.id}`)?.focus();
+        }
+      }
       return;
     }
 
@@ -114,7 +131,7 @@ export function FormularioPersonalizacion({
       nombre: producto.nombre,
       precio: producto.precio,
       imagen: producto.imagen,
-      cantidad,
+      cantidad: Math.max(1, Math.min(99, Number(cantidad) || 1)),
       personalizacion: limpias,
     });
 
@@ -142,7 +159,7 @@ export function FormularioPersonalizacion({
     <form onSubmit={enviar} className="grid gap-5" noValidate>
       {campos.length ? (
         <fieldset className="grid gap-5">
-          <legend className="font-display text-lg font-bold tracking-tight">
+          <legend className="mb-2 font-display text-xl font-bold tracking-tight">
             Personalízalo
           </legend>
 
@@ -150,139 +167,99 @@ export function FormularioPersonalizacion({
             const id = `campo-${campo.id}`;
             const error = errores[campo.etiqueta];
             const valor = respuestas[campo.etiqueta] ?? "";
-            const descrito = [
-              campo.ayuda ? `${id}-ayuda` : null,
-              error ? `${id}-error` : null,
-            ]
-              .filter(Boolean)
-              .join(" ");
+
+            // El contador vive junto a la ayuda y se muestra SIEMPRE que el
+            // campo tenga tope, tenga o no texto de ayuda, y también cuando hay
+            // un error: es justo entonces cuando más se necesita.
+            const contador =
+              campo.max_largo && !esGrupo(campo.tipo)
+                ? `${valor.length}/${campo.max_largo}`
+                : null;
+            const ayuda =
+              [campo.ayuda, contador].filter(Boolean).join(" · ") || undefined;
+
+            if (esGrupo(campo.tipo)) {
+              return (
+                <GrupoOpciones
+                  key={campo.id}
+                  etiqueta={campo.etiqueta}
+                  requerido={campo.requerido}
+                  marcarOpcional={!campo.requerido}
+                  opciones={campo.opciones.map((opcion) => ({
+                    valor: opcion,
+                    muestra: MUESTRAS[opcion.toLowerCase()],
+                  }))}
+                  valor={valor}
+                  onCambio={(nuevo) => responder(campo.etiqueta, nuevo)}
+                  ayuda={ayuda}
+                  error={error}
+                  refPrimero={(nodo) => {
+                    primerosDeGrupo.current[campo.id] = nodo;
+                  }}
+                />
+              );
+            }
+
+            const comunes = {
+              id,
+              value: valor,
+              maxLength: campo.max_largo ?? undefined,
+              "aria-invalid": error ? true : undefined,
+              "aria-describedby":
+                [ayuda ? `${id}-ayuda` : null, error ? `${id}-error` : null]
+                  .filter(Boolean)
+                  .join(" ") || undefined,
+              onChange: (
+                e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+              ) => responder(campo.etiqueta, e.target.value),
+            };
 
             return (
-              <div key={campo.id} className="grid gap-1.5">
-                <label htmlFor={id} className="font-semibold">
-                  {campo.etiqueta}
-                  {campo.requerido ? (
-                    <span className="ml-1 text-alerta" aria-hidden="true">
-                      *
-                    </span>
-                  ) : (
-                    <span className="ml-2 text-sm font-normal text-ink-muted">
-                      opcional
-                    </span>
-                  )}
-                </label>
-
+              <Campo
+                key={campo.id}
+                htmlFor={id}
+                etiqueta={campo.etiqueta}
+                ayuda={ayuda}
+                error={error}
+                requerido={campo.requerido}
+                marcarOpcional={!campo.requerido}
+              >
                 {campo.tipo === "parrafo" ? (
-                  <textarea
-                    id={id}
-                    rows={3}
-                    value={valor}
-                    maxLength={campo.max_largo ?? undefined}
-                    onChange={(e) => responder(campo.etiqueta, e.target.value)}
-                    aria-invalid={error ? true : undefined}
-                    aria-describedby={descrito || undefined}
-                    className={cn(claseControl, "resize-y")}
-                  />
-                ) : campo.tipo === "opcion" || campo.tipo === "color" ? (
-                  <div
-                    id={id}
-                    role="radiogroup"
-                    aria-labelledby={undefined}
-                    aria-invalid={error ? true : undefined}
-                    aria-describedby={descrito || undefined}
-                    tabIndex={-1}
-                    className="flex flex-wrap gap-2"
-                  >
-                    {campo.opciones.map((opcion) => {
-                      const elegido = valor === opcion;
-                      const muestra = MUESTRAS[opcion.toLowerCase()];
-                      return (
-                        <button
-                          key={opcion}
-                          type="button"
-                          role="radio"
-                          aria-checked={elegido}
-                          onClick={() => responder(campo.etiqueta, opcion)}
-                          className={cn(
-                            "inline-flex min-h-12 items-center gap-2 rounded-pill border-2 border-line px-4 font-display text-sm font-bold transition-[background-color,box-shadow] duration-150",
-                            elegido
-                              ? "bg-violeta text-[oklch(0.17_0.022_292)] shadow-solida"
-                              : "bg-surface text-ink hover:bg-violeta-tenue",
-                          )}
-                        >
-                          {muestra ? (
-                            <span
-                              aria-hidden="true"
-                              className="size-4 shrink-0 rounded-full border-2 border-line"
-                              style={{ backgroundColor: muestra }}
-                            />
-                          ) : null}
-                          {opcion}
-                          {elegido ? (
-                            <Check className="size-4" aria-hidden="true" />
-                          ) : null}
-                        </button>
-                      );
-                    })}
-                  </div>
+                  <AreaTexto rows={3} {...comunes} />
                 ) : (
-                  <input
-                    id={id}
+                  <Entrada
                     type={campo.tipo === "numero" ? "number" : "text"}
-                    value={valor}
-                    maxLength={campo.max_largo ?? undefined}
-                    onChange={(e) => responder(campo.etiqueta, e.target.value)}
-                    aria-invalid={error ? true : undefined}
-                    aria-describedby={descrito || undefined}
-                    className={claseControl}
+                    inputMode={campo.tipo === "numero" ? "numeric" : undefined}
+                    {...comunes}
                   />
                 )}
-
-                {campo.ayuda && !error ? (
-                  <p id={`${id}-ayuda`} className="text-sm text-ink-muted">
-                    {campo.ayuda}
-                    {campo.max_largo && campo.tipo !== "opcion" && campo.tipo !== "color"
-                      ? ` · ${valor.length}/${campo.max_largo}`
-                      : ""}
-                  </p>
-                ) : null}
-
-                {error ? (
-                  <p
-                    id={`${id}-error`}
-                    role="alert"
-                    className="text-sm font-semibold text-alerta"
-                  >
-                    {error}
-                  </p>
-                ) : null}
-              </div>
+              </Campo>
             );
           })}
         </fieldset>
       ) : null}
 
       <div className="flex flex-wrap items-end gap-3">
-        <div className="grid gap-1.5">
-          <label htmlFor="cantidad" className="font-semibold">
-            Cantidad
-          </label>
-          <input
+        <Campo htmlFor="cantidad" etiqueta="Cantidad" className="w-24">
+          <Entrada
             id="cantidad"
             type="number"
+            inputMode="numeric"
             min={1}
             max={99}
             value={cantidad}
-            onChange={(e) =>
-              setCantidad(Math.max(1, Math.min(99, Number(e.target.value) || 1)))
+            onChange={(e) => setCantidad(e.target.value)}
+            // Se normaliza al salir, no en cada tecla: así el campo puede estar
+            // vacío mientras se escribe.
+            onBlur={() =>
+              setCantidad(String(Math.max(1, Math.min(99, Number(cantidad) || 1))))
             }
-            className={cn(claseControl, "w-24")}
           />
-        </div>
+        </Campo>
 
         <button
           type="submit"
-          className="inline-flex min-h-14 flex-1 items-center justify-center gap-2 rounded-control border-2 border-line bg-naranja px-6 font-display text-lg font-bold text-[oklch(0.17_0.022_292)] transition-[translate,box-shadow] duration-200 ease-[var(--ease-salida)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-solida active:translate-x-0 active:translate-y-0 active:shadow-none motion-reduce:hover:translate-x-0 motion-reduce:hover:translate-y-0"
+          className="inline-flex min-h-14 flex-1 items-center justify-center gap-2 rounded-control border-2 border-line bg-naranja px-6 font-display text-lg font-bold text-ink-fijo transition-[translate,box-shadow] duration-200 ease-[var(--ease-salida)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-solida active:translate-x-0 active:translate-y-0 active:shadow-none motion-reduce:hover:translate-x-0 motion-reduce:hover:translate-y-0"
         >
           <ShoppingBag className="size-5" aria-hidden="true" />
           Agregar al pedido

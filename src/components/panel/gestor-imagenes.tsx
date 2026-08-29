@@ -143,7 +143,7 @@ export function GestorImagenes({
                   className="object-cover"
                 />
                 {i === 0 ? (
-                  <span className="absolute left-2 top-2 rounded-pill bg-violeta px-2 py-0.5 text-xs font-semibold text-[oklch(0.17_0.022_292)]">
+                  <span className="absolute left-2 top-2 rounded-pill bg-violeta px-2 py-0.5 text-xs font-semibold text-ink-fijo">
                     Portada
                   </span>
                 ) : null}

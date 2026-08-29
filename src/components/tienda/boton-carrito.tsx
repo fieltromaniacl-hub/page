@@ -25,7 +25,7 @@ export function BotonCarrito() {
       {total > 0 ? (
         <span
           aria-hidden="true"
-          className="absolute -right-1.5 -top-1.5 grid min-w-6 place-items-center rounded-pill border-2 border-line bg-naranja px-1 font-display text-xs font-extrabold tabular-nums text-[oklch(0.17_0.022_292)]"
+          className="absolute -right-1.5 -top-1.5 grid min-w-6 place-items-center rounded-pill border-2 border-line bg-naranja px-1 font-display text-xs font-extrabold tabular-nums text-ink-fijo"
         >
           {total}
         </span>

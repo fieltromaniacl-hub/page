@@ -181,7 +181,7 @@ export default async function DetallePedido({
                   className={cn(
                     "inline-flex min-h-10 items-center rounded-pill px-3.5 text-sm font-medium transition-colors duration-150",
                     pedido.estado === valor
-                      ? "bg-violeta text-[oklch(0.17_0.022_292)]"
+                      ? "bg-violeta text-ink-fijo"
                       : "border border-line-soft text-ink-muted hover:border-ink-muted hover:text-ink",
                   )}
                 >

@@ -44,11 +44,14 @@ export function Galeria({ fotos, nombre }: { fotos: Foto[]; nombre: string }) {
                 onClick={() => setActiva(i)}
                 aria-label={`Ver foto ${i + 1} de ${fotos.length}`}
                 aria-current={i === activa ? "true" : undefined}
+                // La foto activa no se distingue solo por color: cambia el
+                // grosor del trazo y gana la sombra sólida de la marca. El
+                // morado por sí solo dejaba el estado en manos del matiz.
                 className={cn(
-                  "relative block size-20 overflow-hidden rounded-control border-2 transition-[border-color,translate] duration-150",
+                  "relative block size-20 overflow-hidden rounded-control transition-[border-color,translate,box-shadow] duration-150",
                   i === activa
-                    ? "border-violeta"
-                    : "border-line-soft hover:-translate-y-0.5 hover:border-line motion-reduce:hover:translate-y-0",
+                    ? "border-[3px] border-violeta shadow-solida"
+                    : "border-2 border-line-soft hover:-translate-y-0.5 hover:border-line motion-reduce:hover:translate-y-0",
                 )}
               >
                 <Image

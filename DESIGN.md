@@ -68,7 +68,7 @@ más común del proyecto:
 
 ```
 Superficies   --bg  --surface  --surface-2
-Tinta         --ink  --ink-muted  --line  --line-soft
+Tinta         --ink  --ink-muted  --line  --line-soft  --ink-fijo
 Morado        --violeta  --violeta-txt  --violeta-tenue
 Verde         --verde  --verde-txt  --verde-tenue
 Naranja       --naranja  --naranja-txt  --naranja-tenue
@@ -83,6 +83,12 @@ Alerta        --alerta  --alerta-tenue
   escaso, el más ruidoso.
 - **Alerta** — rojo, solo errores y agotado. Fuera de la paleta de marca a
   propósito.
+- **`--ink-fijo`** — la tinta que **no** se invierte. Es el texto y el trazo que
+  van *sobre* un relleno de marca (naranja, verde, morado), y esos rellenos
+  siguen siendo claros en tema oscuro: si el texto se invirtiera con `--ink`,
+  el botón principal quedaría blanco sobre naranja claro. Por eso vive solo en
+  `:root` y no se redefine en `.dark`. Antes era el literal
+  `oklch(0.17 0.022 292)` copiado en 20 sitios.
 
 El morado es primario porque es la estrella dominante del logo y porque el
 reflejo del rubro es rojo-amarillo-azul o salvia-crema. Ninguno aparece aquí.
@@ -100,7 +106,21 @@ reflejo del rubro es rojo-amarillo-azul o salvia-crema. Ninguno aparece aquí.
   tinta**, no naranja con texto blanco: más contraste, y es el movimiento del
   lane.
 - **Verde y naranja jamás distinguen dos estados por sí solos.** Todo estado
-  lleva etiqueta de texto — ver `insignias.tsx` en tienda y panel.
+  lleva etiqueta de texto — ver `insignias.tsx` en tienda y panel. Lo mismo vale
+  para lo *seleccionado*: la miniatura activa de la galería engorda el trazo y
+  gana sombra sólida, y la opción elegida en la personalización lleva ✓, además
+  del color.
+
+### Foco
+
+**El foco es el `:focus-visible` de `globals.css` y nada más**: contorno sólido
+de 3px en morado con 3px de separación, que es el trazo grueso de la marca.
+Mide 3.81:1 sobre la superficie blanca y 7.02:1 en oscuro.
+
+Ningún control lo anula con `focus:outline-none`. Los campos de la tienda lo
+hacían y lo reemplazaban por un anillo al 30% de opacidad que medía **1.40:1**:
+por debajo del 3:1 que exige la SC 1.4.11, sobre los dos formularios de los que
+depende el negocio.
 
 ## Typography
 
@@ -182,6 +202,7 @@ Escala semántica, nunca valores arbitrarios:
 | `galeria.tsx` | Galería con miniaturas, cliente |
 | `formulario-personalizacion.tsx` | Los campos que define el panel, con muestras de color y contador |
 | `pagina-carrito.tsx` | Carrito, formulario de pedido y confirmación en una pantalla |
+| `campos.tsx` | `claseControl`, `Campo`, `Entrada`, `AreaTexto`, `Seleccion` y `GrupoOpciones` (radiogroup con flechas y tabulador único) |
 | `insignias.tsx` | Disponibilidad de cara al cliente, siempre con texto |
 | `boton-carrito.tsx` | Contador del encabezado |
 | `enlace-whatsapp.tsx` | Enlace con mensaje escrito; devuelve `null` sin número configurado |
@@ -201,6 +222,10 @@ Escala semántica, nunca valores arbitrarios:
 | `navegacion.tsx` | Barra lateral, colapsa a fila en móvil |
 
 ### Marca — `src/components/marca/`
+
+`color-tema.tsx` en la raíz de componentes mantiene `<meta name="theme-color">`
+en sintonía con el tema resuelto: `viewport.themeColor` solo admite
+`prefers-color-scheme`, que sigue al sistema operativo y no al conmutador.
 
 `logo.tsx` (isotipo y logotipo, SVG que responde al tema), `escena-fieltro.tsx`
 (ilustración del arcoíris de la portada), `iconos-redes.tsx` (SVG propios:

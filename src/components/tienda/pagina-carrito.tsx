@@ -6,14 +6,18 @@ import Link from "next/link";
 import { useActionState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 
+import {
+  AreaTexto,
+  Campo,
+  Entrada,
+  Seleccion,
+  descripcionDe,
+} from "@/components/tienda/campos";
 import { EnlaceWhatsapp } from "@/components/tienda/enlace-whatsapp";
 import { subtotal, usarCarrito } from "@/lib/carrito/tienda";
 import { crearPedido, type EstadoPedido } from "@/lib/acciones/pedido";
 import { REGIONES } from "@/lib/regiones";
-import { cn, formatearPrecio } from "@/lib/utils";
-
-const claseControl =
-  "w-full min-h-12 rounded-control border-2 border-line bg-surface px-3 py-2 text-ink transition-shadow duration-150 placeholder:text-ink-muted focus:outline-none focus:ring-4 focus:ring-violeta/30 aria-[invalid=true]:border-alerta";
+import { formatearPrecio } from "@/lib/utils";
 
 function BotonEnviar() {
   const { pending } = useFormStatus();
@@ -21,7 +25,7 @@ function BotonEnviar() {
     <button
       type="submit"
       disabled={pending}
-      className="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-control border-2 border-line bg-naranja px-6 font-display text-lg font-bold text-[oklch(0.17_0.022_292)] transition-[translate,box-shadow] duration-200 ease-[var(--ease-salida)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-solida disabled:pointer-events-none disabled:opacity-60 motion-reduce:hover:translate-x-0 motion-reduce:hover:translate-y-0"
+      className="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-control border-2 border-line bg-naranja px-6 font-display text-lg font-bold text-ink-fijo transition-[translate,box-shadow] duration-200 ease-[var(--ease-salida)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-solida disabled:pointer-events-none disabled:opacity-60 motion-reduce:hover:translate-x-0 motion-reduce:hover:translate-y-0"
     >
       {pending ? "Enviando tu pedido…" : "Enviar pedido"}
     </button>
@@ -102,7 +106,7 @@ export function PaginaCarrito() {
         </p>
         <Link
           href="/productos"
-          className="mt-6 inline-flex min-h-12 items-center rounded-control border-2 border-line bg-naranja px-5 font-display font-bold text-[oklch(0.17_0.022_292)]"
+          className="mt-6 inline-flex min-h-12 items-center rounded-control border-2 border-line bg-naranja px-5 font-display font-bold text-ink-fijo"
         >
           Ver el catálogo
         </Link>
@@ -113,6 +117,10 @@ export function PaginaCarrito() {
   const err = estado.errores ?? {};
   const previo = estado.valores;
   const total = subtotal(items);
+
+  const AYUDA_CORREO = "Ahí te llega la confirmación del pedido.";
+  const AYUDA_TELEFONO =
+    "Si nos lo dejas, te escribimos por WhatsApp y es más rápido.";
 
   return (
     <div className="grid gap-10 lg:grid-cols-[1.15fr_1fr] lg:gap-14">
@@ -143,7 +151,7 @@ export function PaginaCarrito() {
                 <div className="flex items-start justify-between gap-2">
                   <Link
                     href={`/productos/${item.slug}`}
-                    className="font-display font-bold leading-tight hover:underline"
+                    className="inline-flex min-h-11 items-center font-display font-bold leading-tight hover:underline"
                   >
                     {item.nombre}
                   </Link>
@@ -151,7 +159,7 @@ export function PaginaCarrito() {
                     type="button"
                     onClick={() => quitar(item.clave)}
                     aria-label={`Quitar ${item.nombre} del pedido`}
-                    className="grid size-9 shrink-0 place-items-center rounded-control text-ink-muted transition-colors hover:bg-alerta-tenue hover:text-alerta"
+                    className="grid size-11 shrink-0 place-items-center rounded-control text-ink-muted transition-colors hover:bg-alerta-tenue hover:text-alerta"
                   >
                     <Trash2 className="size-4" aria-hidden="true" />
                   </button>
@@ -174,21 +182,18 @@ export function PaginaCarrito() {
                       type="button"
                       onClick={() => cambiarCantidad(item.clave, item.cantidad - 1)}
                       aria-label={`Quitar una unidad de ${item.nombre}`}
-                      className="grid size-9 place-items-center rounded-pill text-ink transition-colors hover:bg-surface-2"
+                      className="grid size-11 place-items-center rounded-pill text-ink transition-colors hover:bg-surface-2"
                     >
                       <Minus className="size-4" aria-hidden="true" />
                     </button>
-                    <span
-                      aria-live="polite"
-                      className="min-w-8 text-center font-display font-bold tabular-nums"
-                    >
+                    <span className="min-w-8 text-center font-display font-bold tabular-nums">
                       {item.cantidad}
                     </span>
                     <button
                       type="button"
                       onClick={() => cambiarCantidad(item.clave, item.cantidad + 1)}
                       aria-label={`Agregar una unidad de ${item.nombre}`}
-                      className="grid size-9 place-items-center rounded-pill text-ink transition-colors hover:bg-surface-2"
+                      className="grid size-11 place-items-center rounded-pill text-ink transition-colors hover:bg-surface-2"
                     >
                       <Plus className="size-4" aria-hidden="true" />
                     </button>
@@ -211,6 +216,13 @@ export function PaginaCarrito() {
         </div>
         <p className="mt-2 text-sm text-ink-muted">
           El despacho se cotiza aparte según tu comuna y lo acordamos contigo.
+        </p>
+
+        {/* Un solo anuncio para todo el pedido: cambiar una cantidad decía
+            «3» sin más contexto, y había una región viva por cada línea. */}
+        <p aria-live="polite" className="sr-only">
+          {items.length === 1 ? "1 producto" : `${items.length} productos`} en tu
+          pedido. Total {formatearPrecio(total)}.
         </p>
       </section>
 
@@ -246,32 +258,28 @@ export function PaginaCarrito() {
             </p>
           ) : null}
 
-          <div className="grid gap-1.5">
-            <label htmlFor="nombre" className="font-semibold">
-              Nombre <span className="text-alerta" aria-hidden="true">*</span>
-            </label>
-            <input
+          <Campo htmlFor="nombre" etiqueta="Nombre" requerido error={err.nombre}>
+            <Entrada
               id="nombre"
               name="nombre"
               autoComplete="name"
               required
               defaultValue={previo?.nombre ?? ""}
               aria-invalid={err.nombre ? true : undefined}
-              aria-describedby={err.nombre ? "nombre-error" : undefined}
-              className={claseControl}
+              aria-describedby={
+                descripcionDe("nombre", { error: err.nombre }).describedBy
+              }
             />
-            {err.nombre ? (
-              <p id="nombre-error" role="alert" className="text-sm font-semibold text-alerta">
-                {err.nombre}
-              </p>
-            ) : null}
-          </div>
+          </Campo>
 
-          <div className="grid gap-1.5">
-            <label htmlFor="email" className="font-semibold">
-              Correo <span className="text-alerta" aria-hidden="true">*</span>
-            </label>
-            <input
+          <Campo
+            htmlFor="email"
+            etiqueta="Correo"
+            requerido
+            ayuda={AYUDA_CORREO}
+            error={err.email}
+          >
+            <Entrada
               id="email"
               name="email"
               type="email"
@@ -279,25 +287,22 @@ export function PaginaCarrito() {
               required
               defaultValue={previo?.email ?? ""}
               aria-invalid={err.email ? true : undefined}
-              aria-describedby={err.email ? "email-error" : "email-ayuda"}
-              className={claseControl}
+              aria-describedby={
+                descripcionDe("email", {
+                  ayuda: AYUDA_CORREO,
+                  error: err.email,
+                }).describedBy
+              }
             />
-            {err.email ? (
-              <p id="email-error" role="alert" className="text-sm font-semibold text-alerta">
-                {err.email}
-              </p>
-            ) : (
-              <p id="email-ayuda" className="text-sm text-ink-muted">
-                Ahí te llega la confirmación del pedido.
-              </p>
-            )}
-          </div>
+          </Campo>
 
-          <div className="grid gap-1.5">
-            <label htmlFor="telefono" className="font-semibold">
-              Teléfono
-            </label>
-            <input
+          <Campo
+            htmlFor="telefono"
+            etiqueta="Teléfono"
+            ayuda={AYUDA_TELEFONO}
+            error={err.telefono}
+          >
+            <Entrada
               id="telefono"
               name="telefono"
               type="tel"
@@ -305,60 +310,47 @@ export function PaginaCarrito() {
               placeholder="+56 9 1234 5678"
               defaultValue={previo?.telefono ?? ""}
               aria-invalid={err.telefono ? true : undefined}
-              aria-describedby={err.telefono ? "telefono-error" : "telefono-ayuda"}
-              className={claseControl}
+              aria-describedby={
+                descripcionDe("telefono", {
+                  ayuda: AYUDA_TELEFONO,
+                  error: err.telefono,
+                }).describedBy
+              }
             />
-            {err.telefono ? (
-              <p id="telefono-error" role="alert" className="text-sm font-semibold text-alerta">
-                {err.telefono}
-              </p>
-            ) : (
-              <p id="telefono-ayuda" className="text-sm text-ink-muted">
-                Si nos lo dejas, te escribimos por WhatsApp y es más rápido.
-              </p>
-            )}
-          </div>
+          </Campo>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="grid gap-1.5">
-              <label htmlFor="comuna" className="font-semibold">Comuna</label>
-              <input
+            <Campo htmlFor="comuna" etiqueta="Comuna">
+              <Entrada
                 id="comuna"
                 name="comuna"
                 autoComplete="address-level2"
                 defaultValue={previo?.comuna ?? ""}
-                className={claseControl}
               />
-            </div>
-            <div className="grid gap-1.5">
-              <label htmlFor="region" className="font-semibold">Región</label>
-              <select
+            </Campo>
+            <Campo htmlFor="region" etiqueta="Región">
+              <Seleccion
                 id="region"
                 name="region"
                 defaultValue={previo?.region ?? ""}
-                className={cn(claseControl, "pr-8")}
               >
                 <option value="">Elige una</option>
                 {REGIONES.map((r) => (
                   <option key={r} value={r}>{r}</option>
                 ))}
-              </select>
-            </div>
+              </Seleccion>
+            </Campo>
           </div>
 
-          <div className="grid gap-1.5">
-            <label htmlFor="notas" className="font-semibold">
-              ¿Algo más que debamos saber?
-            </label>
-            <textarea
+          <Campo htmlFor="notas" etiqueta="¿Algo más que debamos saber?">
+            <AreaTexto
               id="notas"
               name="notas"
               rows={3}
               defaultValue={previo?.notas ?? ""}
               placeholder="Para cuándo lo necesitas, si es un regalo, alguna preferencia…"
-              className={cn(claseControl, "resize-y")}
             />
-          </div>
+          </Campo>
 
           <BotonEnviar />
 

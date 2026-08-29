@@ -13,9 +13,9 @@ export const botonVariants = cva(
   {
     variants: {
       variante: {
-        principal: "bg-naranja text-[oklch(0.17_0.022_292)]",
+        principal: "bg-naranja text-ink-fijo",
         secundario: "bg-surface text-ink hover:bg-violeta-tenue",
-        marca: "bg-violeta text-[oklch(0.17_0.022_292)]",
+        marca: "bg-violeta text-ink-fijo",
       },
       tamano: {
         sm: "min-h-11 px-4 text-sm",

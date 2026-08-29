@@ -1,4 +1,4 @@
-import { ArrowRight, Hand, Leaf, Sparkles } from "lucide-react";
+import { ArrowRight, Hand, Leaf, Type } from "lucide-react";
 import Link from "next/link";
 
 import { EscenaFieltro } from "@/components/marca/escena-fieltro";
@@ -155,8 +155,8 @@ export default async function Inicio() {
       >
         <div className="mx-auto grid max-w-[76rem] gap-8 px-4 py-14 sm:px-6 lg:grid-cols-2 lg:gap-14 lg:py-20">
           <div>
-            <span className="grid size-14 place-items-center rounded-card border-[3px] border-line bg-naranja text-[oklch(0.17_0.022_292)]">
-              <Sparkles className="size-7" strokeWidth={2.25} aria-hidden="true" />
+            <span className="grid size-14 place-items-center rounded-card border-[3px] border-line bg-naranja text-ink-fijo">
+              <Type className="size-7" strokeWidth={2.25} aria-hidden="true" />
             </span>
             <h2
               id="titulo-garantias"
@@ -272,7 +272,7 @@ export default async function Inicio() {
               <li key={paso.numero} className="flex gap-4">
                 <span
                   aria-hidden="true"
-                  className="grid size-11 shrink-0 place-items-center rounded-pill border-2 border-line bg-naranja font-display text-lg font-extrabold text-[oklch(0.17_0.022_292)]"
+                  className="grid size-11 shrink-0 place-items-center rounded-pill border-2 border-line bg-naranja font-display text-lg font-extrabold text-ink-fijo"
                 >
                   {paso.numero}
                 </span>

@@ -29,7 +29,7 @@ export function EnlaceWhatsapp({
       className={cn(
         "inline-flex min-h-12 items-center gap-2 rounded-control border-2 border-line px-4 font-display font-bold transition-[background-color,translate,box-shadow] duration-200 ease-[var(--ease-salida)] hover:-translate-y-0.5 hover:shadow-solida motion-reduce:hover:translate-y-0",
         variante === "fuerte"
-          ? "bg-naranja text-[oklch(0.17_0.022_292)]"
+          ? "bg-naranja text-ink-fijo"
           : "bg-verde-tenue text-verde-txt",
         className,
       )}

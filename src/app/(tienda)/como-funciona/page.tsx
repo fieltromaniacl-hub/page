@@ -54,7 +54,7 @@ export default function ComoFunciona() {
           <li key={paso.numero} className="flex gap-4">
             <span
               aria-hidden="true"
-              className="grid size-11 shrink-0 place-items-center rounded-pill border-2 border-line bg-naranja font-display text-lg font-extrabold text-[oklch(0.17_0.022_292)]"
+              className="grid size-11 shrink-0 place-items-center rounded-pill border-2 border-line bg-naranja font-display text-lg font-extrabold text-ink-fijo"
             >
               {paso.numero}
             </span>
@@ -91,7 +91,7 @@ export default function ComoFunciona() {
       <p>
         <Link
           href="/productos"
-          className="inline-flex min-h-12 items-center rounded-control border-2 border-line bg-naranja px-5 font-display font-bold text-[oklch(0.17_0.022_292)]"
+          className="inline-flex min-h-12 items-center rounded-control border-2 border-line bg-naranja px-5 font-display font-bold text-ink-fijo"
         >
           Ver el catálogo
         </Link>

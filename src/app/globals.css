@@ -39,6 +39,16 @@
   /* Rojo — solo errores y agotado. Fuera de la paleta de marca. */
   --alerta: oklch(0.58 0.19 25);
   --alerta-tenue: oklch(0.95 0.03 25);
+
+  /**
+   * Tinta fija para texto y trazo SOBRE rellenos de marca (naranja, verde,
+   * morado). Deliberadamente fuera de `.dark`: los rellenos de marca siguen
+   * siendo claros en tema oscuro, así que su texto tiene que seguir siendo
+   * oscuro. Si esto se invirtiera con `--ink`, el botón principal quedaría
+   * blanco sobre naranja claro. Medido: 8.62:1 sobre naranja claro y 9.95:1
+   * sobre naranja oscuro.
+   */
+  --ink-fijo: oklch(0.17 0.022 292);
 }
 
 .dark {
@@ -92,6 +102,8 @@
   --color-alerta: var(--alerta);
   --color-alerta-tenue: var(--alerta-tenue);
 
+  --color-ink-fijo: var(--ink-fijo);
+
   --font-display: var(--font-gabarito), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
 
@@ -130,6 +142,9 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    /* El encabezado pegajoso mide 71px: sin esto, un enlace a un ancla deja
+       el destino escondido detrás de la barra. */
+    scroll-padding-top: 5.5rem;
   }
 
   body {
@@ -137,7 +152,6 @@
     color: var(--ink);
     font-family: var(--font-sans);
     font-synthesis-weight: none;
-    text-rendering: optimizeLegibility;
   }
 
   h1,
@@ -171,7 +185,7 @@
 
   ::selection {
     background-color: var(--naranja);
-    color: oklch(0.17 0.022 292);
+    color: var(--ink-fijo);
   }
 
   /* Placeholder al mismo 4.5:1 que el cuerpo, no gris claro */

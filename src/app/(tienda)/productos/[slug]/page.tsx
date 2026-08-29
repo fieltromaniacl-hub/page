@@ -179,7 +179,7 @@ export default async function FichaProducto({
             </p>
           ) : null}
 
-          <h1 className="mt-3 text-[length:var(--text-titulo)] leading-[1.05]">
+          <h1 className="mt-3 text-[length:var(--text-titulo)] leading-[1.05] [overflow-wrap:break-word]">
             {producto.nombre}
           </h1>
 

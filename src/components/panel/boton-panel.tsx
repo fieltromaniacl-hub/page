@@ -12,7 +12,7 @@ export const botonPanelVariants = cva(
   {
     variants: {
       variante: {
-        primario: "bg-violeta text-[oklch(0.17_0.022_292)] hover:brightness-95",
+        primario: "bg-violeta text-ink-fijo hover:brightness-95",
         neutro:
           "border border-line-soft bg-surface text-ink hover:border-ink-muted hover:bg-surface-2",
         fantasma: "text-ink-muted hover:bg-surface-2 hover:text-ink",

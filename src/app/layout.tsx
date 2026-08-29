@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Gabarito, Hanken_Grotesk } from "next/font/google";
 
+import { ColorDeTema } from "@/components/color-tema";
 import { ThemeProvider } from "@/components/theme-provider";
 import { urlSitio } from "@/lib/utils";
 import "./globals.css";
@@ -64,10 +65,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fbfafd" },
-    { media: "(prefers-color-scheme: dark)", color: "#221f2c" },
-  ],
+  // El tema por defecto es claro. `ColorDeTema` lo actualiza en el cliente
+  // según el tema resuelto; esto es el valor del primer pintado y el de
+  // quienes navegan sin JavaScript.
+  themeColor: "#fafafd",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -84,6 +85,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           enableSystem
           disableTransitionOnChange
         >
+          <ColorDeTema />
           <a
             href="#contenido"
             className="sr-only rounded-control border-2 border-line bg-naranja px-4 py-2 font-semibold text-ink focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[var(--z-tooltip)]"
