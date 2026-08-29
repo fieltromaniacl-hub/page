@@ -26,10 +26,17 @@ export async function guardarAjustes(
   _previo: EstadoAjustes,
   datos: FormData,
 ): Promise<EstadoAjustes> {
+  // Solo se tocan las claves que venían en el formulario. El panel muestra los
+  // ajustes en dos pantallas (Portada y Textos), y recorrer el catálogo entero
+  // haría que guardar una borrara los campos de la otra por no venir en el
+  // envío.
+  const enviadas = CLAVES_AJUSTE.filter((clave) => datos.has(clave));
+  if (!enviadas.length) return { error: "No llegó ningún campo que guardar." };
+
   const valores: Record<string, string> = {};
   const errores: Record<string, string> = {};
 
-  for (const clave of CLAVES_AJUSTE) {
+  for (const clave of enviadas) {
     const def = AJUSTES[clave] as DefinicionAjuste;
     const valor = String(datos.get(clave) ?? "").trim();
     valores[clave] = valor;
@@ -52,7 +59,7 @@ export async function guardarAjustes(
 
   const supabase = await crearClienteServidor();
   const { error } = await supabase.from("ajustes").upsert(
-    CLAVES_AJUSTE.map((clave) => ({ clave, valor: valores[clave] })),
+    enviadas.map((clave) => ({ clave, valor: valores[clave] })),
     { onConflict: "clave" },
   );
 

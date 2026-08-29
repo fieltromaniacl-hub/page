@@ -141,3 +141,49 @@ export const obtenerAvisoVigente = cache(async (): Promise<Aviso | null> => {
     return null;
   }
 });
+
+export type Etapa = {
+  id: string;
+  edad: string;
+  rango: string;
+  titulo: string;
+  texto: string;
+  tono: "naranja" | "verde" | "violeta";
+};
+
+export type Paso = { id: string; titulo: string; texto: string };
+
+/** Las tarjetas de edad de la portada. RLS ya descarta las desactivadas. */
+export const obtenerEtapas = cache(async (): Promise<Etapa[]> => {
+  try {
+    const supabase = crearClientePublico();
+    const { data } = await supabase
+      .from("etapas")
+      .select("id, edad, rango, titulo, texto, tono")
+      .order("orden");
+    return data ?? [];
+  } catch {
+    return [];
+  }
+});
+
+/**
+ * Los pasos del pedido, una sola vez para los dos sitios donde se explican.
+ *
+ * `soloPortada` devuelve el resumen; sin él vienen todos, que es lo que
+ * muestra /como-funciona. Antes eran dos listas escritas a mano que ya se
+ * contradecían entre sí.
+ */
+export const obtenerPasos = cache(
+  async (soloPortada = false): Promise<Paso[]> => {
+    try {
+      const supabase = crearClientePublico();
+      let consulta = supabase.from("pasos").select("id, titulo, texto").order("orden");
+      if (soloPortada) consulta = consulta.eq("en_portada", true);
+      const { data } = await consulta;
+      return data ?? [];
+    } catch {
+      return [];
+    }
+  },
+);

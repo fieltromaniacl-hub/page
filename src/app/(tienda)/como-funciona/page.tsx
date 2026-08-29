@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { Bloque, PaginaContenido } from "@/components/tienda/pagina-contenido";
+import { obtenerPasos } from "@/lib/contenido";
 
 export const metadata: Metadata = {
   title: "Cómo funciona el pedido",
@@ -10,53 +11,24 @@ export const metadata: Metadata = {
   alternates: { canonical: "/como-funciona" },
 };
 
-const PASOS = [
-  {
-    numero: "1",
-    titulo: "Eliges y personalizas",
-    texto:
-      "Escoges el producto y nos dices los datos que necesitamos: el nombre que va bordado, los colores, la edad del niño. Todo eso viaja con tu pedido, así no tenemos que preguntártelo después.",
-  },
-  {
-    numero: "2",
-    titulo: "Envías el pedido",
-    texto:
-      "Nos dejas tu nombre, correo y teléfono. En ese momento no se paga nada: solo queda registrado lo que quieres.",
-  },
-  {
-    numero: "3",
-    titulo: "Te contactamos",
-    texto:
-      "Te escribimos por correo o WhatsApp para confirmar los detalles, cotizar el despacho a tu comuna y acordar la forma de pago.",
-  },
-  {
-    numero: "4",
-    titulo: "Recién ahí empieza la confección",
-    texto:
-      "Una vez acordado, se corta y se cose tu pedido. Cada producto indica cuántos días toma aproximadamente.",
-  },
-  {
-    numero: "5",
-    titulo: "Te lo enviamos",
-    texto:
-      "Despachamos a todo Chile. Te avisamos cuando salga y te damos el número de seguimiento.",
-  },
-];
+export const revalidate = 300;
 
-export default function ComoFunciona() {
+export default async function ComoFunciona() {
+  const pasos = await obtenerPasos();
+
   return (
     <PaginaContenido
       titulo="Es un encargo, no una compra al paso"
       bajada="Todo lo que vendemos se hace a mano después de que lo pides. Por eso conversamos contigo antes de cobrar nada."
     >
       <ol className="grid gap-6">
-        {PASOS.map((paso) => (
-          <li key={paso.numero} className="flex gap-4">
+        {pasos.map((paso, i) => (
+          <li key={paso.id} className="flex gap-4">
             <span
               aria-hidden="true"
               className="grid size-11 shrink-0 place-items-center rounded-pill border-2 border-line bg-naranja font-display text-lg font-extrabold text-ink-fijo"
             >
-              {paso.numero}
+              {i + 1}
             </span>
             <div>
               <h2 className="font-display text-lg font-bold tracking-tight">

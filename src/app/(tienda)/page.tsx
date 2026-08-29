@@ -6,64 +6,25 @@ import { EnlaceWhatsapp } from "@/components/tienda/enlace-whatsapp";
 import { TarjetaProducto } from "@/components/tienda/tarjeta-producto";
 import { botonVariants } from "@/components/ui/boton";
 import { obtenerDestacados } from "@/lib/consultas";
-import { obtenerAjustes } from "@/lib/contenido";
+import { obtenerAjustes, obtenerEtapas, obtenerPasos } from "@/lib/contenido";
 import { cn } from "@/lib/utils";
 
 // La portada muestra productos, así que se regenera con el catálogo.
 export const revalidate = 300;
 
-const ETAPAS = [
-  {
-    edad: "1 a 2 años",
-    rango: "1-2",
-    titulo: "Descubrir con las manos",
-    texto:
-      "Texturas, solapas y piezas grandes. Trabajan la motricidad gruesa y la permanencia del objeto.",
-    fondo: "bg-violeta-tenue",
-  },
-  {
-    edad: "3 a 4 años",
-    rango: "3-4",
-    titulo: "Abrochar, encajar, contar",
-    texto:
-      "Botones, cierres y cordones. Motricidad fina, secuencias y primeros números.",
-    fondo: "bg-verde-tenue",
-  },
-  {
-    edad: "5 a 7 años",
-    rango: "5-7",
-    titulo: "Leer y crear historias",
-    texto:
-      "Letras, relojes y escenarios completos. Lectura temprana y juego simbólico.",
-    fondo: "bg-naranja-tenue",
-  },
-];
-
-const PASOS = [
-  {
-    numero: "1",
-    titulo: "Eliges y personalizas",
-    texto:
-      "Escoges el libro, nos dices el nombre del niño y los colores que prefieres.",
-  },
-  {
-    numero: "2",
-    titulo: "Recibimos tu pedido",
-    texto:
-      "Te llega un correo de confirmación al instante y nosotros nos ponemos en contacto contigo.",
-  },
-  {
-    numero: "3",
-    titulo: "Acordamos pago y entrega",
-    texto:
-      "Coordinamos contigo la forma de pago y el despacho. Recién ahí empieza la confección.",
-  },
-];
+/** El tono de la etapa se traduce aquí: la base guarda un color, no una clase. */
+const FONDO_DE_TONO = {
+  violeta: "bg-violeta-tenue",
+  verde: "bg-verde-tenue",
+  naranja: "bg-naranja-tenue",
+} as const;
 
 export default async function Inicio() {
-  const [destacados, ajustes] = await Promise.all([
+  const [destacados, ajustes, etapas, pasos] = await Promise.all([
     obtenerDestacados(3),
     obtenerAjustes(),
+    obtenerEtapas(),
+    obtenerPasos(true),
   ]);
 
   return (
@@ -79,17 +40,15 @@ export default async function Inicio() {
 
         <div className="lg:order-1">
           <p className="inline-flex items-center rounded-pill border-2 border-line bg-verde-tenue px-4 py-1.5 font-display text-sm font-bold tracking-tight text-verde-txt">
-            Hecho a mano en Chile
+            {ajustes.portada_insignia}
           </p>
 
           <h1 className="mt-5 text-[length:var(--text-display)] leading-[0.98]">
-            Un libro de fieltro con su nombre en la portada
+            {ajustes.portada_titular}
           </h1>
 
           <p className="mt-5 max-w-[52ch] text-[length:var(--text-sub)] leading-relaxed text-ink-muted">
-            Libros de estimulación para niños de 1 a 7 años, cosidos uno por uno
-            y personalizados para tu hijo. Cada página trabaja una habilidad
-            distinta.
+            {ajustes.portada_bajada}
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -129,7 +88,7 @@ export default async function Inicio() {
                 id="titulo-destacados"
                 className="text-[length:var(--text-titulo)] leading-[1.05]"
               >
-                Lo que está saliendo del taller
+                {ajustes.portada_destacados_titulo}
               </h2>
               <Link
                 href="/productos"
@@ -165,12 +124,10 @@ export default async function Inicio() {
               id="titulo-garantias"
               className="mt-5 text-[length:var(--text-seccion)] leading-tight"
             >
-              Lleva su nombre, y eso no se compra en una tienda
+              {ajustes.portada_promesa_titulo}
             </h2>
             <p className="mt-3 max-w-[46ch] text-ink-muted">
-              Bordamos el nombre del niño en la portada y adaptamos los colores a
-              lo que ya tiene en su cuarto. Por eso cada libro se hace después de
-              que lo pides: no hay dos iguales, y el tuyo todavía no existe.
+              {ajustes.portada_promesa_texto}
             </p>
           </div>
 
@@ -214,26 +171,24 @@ export default async function Inicio() {
           id="titulo-etapas"
           className="max-w-[20ch] text-[length:var(--text-titulo)] leading-[1.05]"
         >
-          Cada edad necesita un libro distinto
+          {ajustes.portada_etapas_titulo}
         </h2>
         <p className="mt-4 max-w-[60ch] text-ink-muted">
-          No es el mismo juguete a los dos que a los seis. Elige la etapa en la
-          que está tu hijo y te mostramos lo que le sirve.
+          {ajustes.portada_etapas_bajada}
         </p>
 
         <ul className="mt-10 grid gap-5 md:grid-cols-3">
-          {ETAPAS.map((etapa) => (
-            <li key={etapa.rango}>
+          {etapas.map((etapa) => (
+            <li key={etapa.id}>
               {/*
-                Antes eran tarjetas con gesto de elemento accionable que no
-                llevaban a ninguna parte. Ahora filtran el catálogo por rango
-                de edad, que es como piensa quien compra un regalo.
+                Las tarjetas filtran el catálogo por rango de edad, que es como
+                piensa quien compra un regalo.
               */}
               <Link
                 href={`/productos?edad=${etapa.rango}`}
                 className={cn(
                   "flex h-full flex-col rounded-card border-[3px] border-line p-6 transition-[translate,box-shadow] duration-200 ease-[var(--ease-salida)] hover:-translate-x-1 hover:-translate-y-1 hover:shadow-solida-lg motion-reduce:hover:translate-x-0 motion-reduce:hover:translate-y-0",
-                  etapa.fondo,
+                  FONDO_DE_TONO[etapa.tono],
                 )}
               >
                 <p className="inline-flex self-start items-center rounded-pill border-2 border-line bg-surface px-3 py-1 font-display text-sm font-bold tracking-tight text-ink">
@@ -263,21 +218,20 @@ export default async function Inicio() {
             id="titulo-encargo"
             className="max-w-[22ch] text-[length:var(--text-titulo)] leading-[1.05]"
           >
-            Es un encargo, no una compra al paso
+            {ajustes.portada_pasos_titulo}
           </h2>
           <p className="mt-4 max-w-[60ch] text-ink-muted">
-            Los productos se hacen después de que pides. Por eso conversamos
-            contigo antes de cobrar nada.
+            {ajustes.portada_pasos_bajada}
           </p>
 
           <ol className="mt-10 grid gap-6 md:grid-cols-3">
-            {PASOS.map((paso) => (
-              <li key={paso.numero} className="flex gap-4">
+            {pasos.map((paso, i) => (
+              <li key={paso.id} className="flex gap-4">
                 <span
                   aria-hidden="true"
                   className="grid size-11 shrink-0 place-items-center rounded-pill border-2 border-line bg-naranja font-display text-lg font-extrabold text-ink-fijo"
                 >
-                  {paso.numero}
+                  {i + 1}
                 </span>
                 <div>
                   <h3 className="font-display text-lg font-bold tracking-tight">
@@ -295,11 +249,10 @@ export default async function Inicio() {
       <section className="mx-auto max-w-[76rem] px-4 py-16 sm:px-6 lg:py-24">
         <div className="rounded-card border-[3px] border-line bg-violeta-tenue p-8 text-center sm:p-12">
           <h2 className="mx-auto max-w-[24ch] text-[length:var(--text-titulo)] leading-[1.05]">
-            ¿No sabes cuál elegir?
+            {ajustes.portada_cierre_titulo}
           </h2>
           <p className="mx-auto mt-4 max-w-[52ch] text-ink/85">
-            Dinos la edad del niño y qué le gusta, y te recomendamos el libro que
-            le va a durar más tiempo. Respondemos por WhatsApp.
+            {ajustes.portada_cierre_texto}
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <EnlaceWhatsapp

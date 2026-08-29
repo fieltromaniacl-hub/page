@@ -69,6 +69,134 @@ export const AJUSTES = {
     maxLargo: 160,
     porDefecto: "Respondemos en horario hábil, de lunes a viernes.",
   },
+
+  // ── Portada, en el orden en que se leen al bajar por la página ──────────
+  portada_insignia: {
+    etiqueta: "Píldora sobre el titular",
+    ayuda:
+      "Lo primero que se lee. Sirve para algo de temporada: «Envíos antes de Navidad», «Pedidos abiertos para marzo».",
+    tipo: "texto",
+    grupo: "Portada",
+    dondeSeVe: "Arriba del titular, en la portada",
+    maxLargo: 60,
+    porDefecto: "Hecho a mano en Chile",
+  },
+
+  portada_titular: {
+    etiqueta: "Titular",
+    ayuda:
+      "La frase grande de la portada. Es lo que decide si alguien que llega de Facebook se queda.",
+    tipo: "texto",
+    grupo: "Portada",
+    dondeSeVe: "Titular de la portada",
+    maxLargo: 90,
+    porDefecto: "Un libro de fieltro con su nombre en la portada",
+  },
+
+  portada_bajada: {
+    etiqueta: "Texto bajo el titular",
+    ayuda: "Dos o tres líneas explicando qué se vende y para quién.",
+    tipo: "parrafo",
+    grupo: "Portada",
+    dondeSeVe: "Bajo el titular de la portada",
+    maxLargo: 260,
+    porDefecto:
+      "Libros de estimulación para niños de 1 a 7 años, cosidos uno por uno y personalizados para tu hijo. Cada página trabaja una habilidad distinta.",
+  },
+
+  portada_destacados_titulo: {
+    etiqueta: "Título de los productos destacados",
+    ayuda: "Encabeza la fila de productos. Solo se ve si hay catálogo publicado.",
+    tipo: "texto",
+    grupo: "Portada",
+    dondeSeVe: "Sección de destacados de la portada",
+    maxLargo: 70,
+    porDefecto: "Lo que está saliendo del taller",
+  },
+
+  portada_promesa_titulo: {
+    etiqueta: "Título del bloque de personalización",
+    ayuda: "El argumento de por qué el producto vale lo que vale.",
+    tipo: "texto",
+    grupo: "Portada",
+    dondeSeVe: "Bloque naranja de la portada",
+    maxLargo: 80,
+    porDefecto: "Lleva su nombre, y eso no se compra en una tienda",
+  },
+
+  portada_promesa_texto: {
+    etiqueta: "Texto del bloque de personalización",
+    tipo: "parrafo",
+    ayuda: "Explica en qué consiste personalizar y por qué se fabrica después de pedir.",
+    grupo: "Portada",
+    dondeSeVe: "Bloque naranja de la portada",
+    maxLargo: 320,
+    porDefecto:
+      "Bordamos el nombre del niño en la portada y adaptamos los colores a lo que ya tiene en su cuarto. Por eso cada libro se hace después de que lo pides: no hay dos iguales, y el tuyo todavía no existe.",
+  },
+
+  portada_etapas_titulo: {
+    etiqueta: "Título de las etapas por edad",
+    tipo: "texto",
+    ayuda: "Encabeza las tres tarjetas de edad, que se editan más abajo.",
+    grupo: "Portada",
+    dondeSeVe: "Sección de etapas de la portada",
+    maxLargo: 70,
+    porDefecto: "Cada edad necesita un libro distinto",
+  },
+
+  portada_etapas_bajada: {
+    etiqueta: "Texto de las etapas por edad",
+    tipo: "parrafo",
+    ayuda: "Una o dos líneas antes de las tarjetas.",
+    grupo: "Portada",
+    dondeSeVe: "Sección de etapas de la portada",
+    maxLargo: 220,
+    porDefecto:
+      "No es el mismo juguete a los dos que a los seis. Elige la etapa en la que está tu hijo y te mostramos lo que le sirve.",
+  },
+
+  portada_pasos_titulo: {
+    etiqueta: "Título de los pasos del pedido",
+    tipo: "texto",
+    ayuda: "Encabeza el resumen del proceso, que se edita más abajo.",
+    grupo: "Portada",
+    dondeSeVe: "Sección de pasos de la portada",
+    maxLargo: 70,
+    porDefecto: "Es un encargo, no una compra al paso",
+  },
+
+  portada_pasos_bajada: {
+    etiqueta: "Texto de los pasos del pedido",
+    tipo: "parrafo",
+    ayuda: "Una o dos líneas antes de los pasos.",
+    grupo: "Portada",
+    dondeSeVe: "Sección de pasos de la portada",
+    maxLargo: 220,
+    porDefecto:
+      "Los productos se hacen después de que pides. Por eso conversamos contigo antes de cobrar nada.",
+  },
+
+  portada_cierre_titulo: {
+    etiqueta: "Título del cierre",
+    tipo: "texto",
+    ayuda: "La última invitación antes del pie.",
+    grupo: "Portada",
+    dondeSeVe: "Recuadro morado al final de la portada",
+    maxLargo: 70,
+    porDefecto: "¿No sabes cuál elegir?",
+  },
+
+  portada_cierre_texto: {
+    etiqueta: "Texto del cierre",
+    tipo: "parrafo",
+    ayuda: "Qué pasa si escriben. Conviene prometer solo lo que se puede cumplir.",
+    grupo: "Portada",
+    dondeSeVe: "Recuadro morado al final de la portada",
+    maxLargo: 260,
+    porDefecto:
+      "Dinos la edad del niño y qué le gusta, y te recomendamos el libro que le va a durar más tiempo. Respondemos por WhatsApp.",
+  },
 } as const satisfies Record<string, DefinicionAjuste>;
 
 export type ClaveAjuste = keyof typeof AJUSTES;

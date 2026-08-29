@@ -57,7 +57,7 @@ export type Database = {
           id: string
           orden: number
           texto: string
-          tono: Database["public"]["Enums"]["tono_aviso"]
+          tono: Database["public"]["Enums"]["tono_marca"]
         }
         Insert: {
           activo?: boolean
@@ -70,7 +70,7 @@ export type Database = {
           id?: string
           orden?: number
           texto: string
-          tono?: Database["public"]["Enums"]["tono_aviso"]
+          tono?: Database["public"]["Enums"]["tono_marca"]
         }
         Update: {
           activo?: boolean
@@ -83,7 +83,7 @@ export type Database = {
           id?: string
           orden?: number
           texto?: string
-          tono?: Database["public"]["Enums"]["tono_aviso"]
+          tono?: Database["public"]["Enums"]["tono_marca"]
         }
         Relationships: []
       }
@@ -111,6 +111,39 @@ export type Database = {
           nombre?: string
           orden?: number
           slug?: string
+        }
+        Relationships: []
+      }
+      etapas: {
+        Row: {
+          activa: boolean
+          edad: string
+          id: string
+          orden: number
+          rango: string
+          texto: string
+          titulo: string
+          tono: Database["public"]["Enums"]["tono_marca"]
+        }
+        Insert: {
+          activa?: boolean
+          edad: string
+          id?: string
+          orden?: number
+          rango: string
+          texto: string
+          titulo: string
+          tono?: Database["public"]["Enums"]["tono_marca"]
+        }
+        Update: {
+          activa?: boolean
+          edad?: string
+          id?: string
+          orden?: number
+          rango?: string
+          texto?: string
+          titulo?: string
+          tono?: Database["public"]["Enums"]["tono_marca"]
         }
         Relationships: []
       }
@@ -187,6 +220,30 @@ export type Database = {
           seo_descripcion?: string | null
           seo_titulo?: string | null
           slug?: string
+          titulo?: string
+        }
+        Relationships: []
+      }
+      pasos: {
+        Row: {
+          en_portada: boolean
+          id: string
+          orden: number
+          texto: string
+          titulo: string
+        }
+        Insert: {
+          en_portada?: boolean
+          id?: string
+          orden?: number
+          texto: string
+          titulo: string
+        }
+        Update: {
+          en_portada?: boolean
+          id?: string
+          orden?: number
+          texto?: string
           titulo?: string
         }
         Relationships: []
@@ -478,7 +535,7 @@ export type Database = {
       estado_producto: "activo" | "inactivo" | "archivado"
       estado_stock: "disponible" | "por_encargo" | "agotado"
       tipo_campo: "texto" | "parrafo" | "opcion" | "color" | "numero"
-      tono_aviso: "naranja" | "verde" | "violeta"
+      tono_marca: "naranja" | "verde" | "violeta"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -618,7 +675,7 @@ export const Constants = {
       estado_producto: ["activo", "inactivo", "archivado"],
       estado_stock: ["disponible", "por_encargo", "agotado"],
       tipo_campo: ["texto", "parrafo", "opcion", "color", "numero"],
-      tono_aviso: ["naranja", "verde", "violeta"],
+      tono_marca: ["naranja", "verde", "violeta"],
     },
   },
 } as const

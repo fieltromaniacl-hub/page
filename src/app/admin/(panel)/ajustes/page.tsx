@@ -19,7 +19,7 @@ export default async function PaginaAjustes() {
       </p>
 
       <div className="mt-6">
-        <FormularioAjustes valores={valores} />
+        <FormularioAjustes valores={valores} soloGrupos={["Pago y entrega", "Contacto"]} />
       </div>
     </main>
   );

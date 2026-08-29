@@ -22,14 +22,24 @@ function BotonGuardar() {
   );
 }
 
-export function FormularioAjustes({ valores }: { valores: Ajustes }) {
+export function FormularioAjustes({
+  valores,
+  soloGrupos,
+}: {
+  valores: Ajustes;
+  /** Si se pasa, se muestran solo esos grupos. El resto no viaja en el envío
+   *  y la acción no los toca. */
+  soloGrupos?: string[];
+}) {
   const [estado, accion] = useActionState<EstadoAjustes, FormData>(
     guardarAjustes,
     {},
   );
 
   const err = estado.errores ?? {};
-  const grupos = ajustesPorGrupo();
+  const grupos = ajustesPorGrupo().filter(
+    ({ grupo }) => !soloGrupos || soloGrupos.includes(grupo),
+  );
 
   return (
     <form action={accion} className="grid gap-8">
