@@ -2,6 +2,7 @@
 
 import {
   FileText,
+  Megaphone,
   LayoutDashboard,
   LogOut,
   Package,
@@ -22,6 +23,7 @@ const ENLACES = [
   { href: "/admin/pedidos", texto: "Pedidos", Icono: ShoppingBag },
   { href: "/admin/productos", texto: "Productos", Icono: Package },
   { href: "/admin/categorias", texto: "Categorías", Icono: Tags },
+  { href: "/admin/avisos", texto: "Avisos", Icono: Megaphone },
   { href: "/admin/paginas", texto: "Páginas", Icono: FileText },
   { href: "/admin/ajustes", texto: "Textos", Icono: SlidersHorizontal },
 ];

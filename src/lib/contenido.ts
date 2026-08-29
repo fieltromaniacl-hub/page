@@ -105,3 +105,39 @@ export function parrafosDe(cuerpo: string) {
     .filter(Boolean);
 }
 
+export type Aviso = {
+  id: string;
+  texto: string;
+  enlace_texto: string | null;
+  enlace_href: string | null;
+  tono: "naranja" | "verde" | "violeta";
+};
+
+/**
+ * El aviso que toca mostrar ahora, o null.
+ *
+ * No filtra por fechas aquí: lo hace la política RLS de la tabla, que compara
+ * contra el día en Chile. El público no puede leer un aviso apagado ni vencido
+ * aunque consulte la API a mano, así que una promoción en borrador no se
+ * filtra antes de tiempo.
+ *
+ * Si hay varios vigentes se muestra uno solo, el de menor `orden`: dos franjas
+ * apiladas sobre el encabezado serían ruido, no dos anuncios.
+ */
+export const obtenerAvisoVigente = cache(async (): Promise<Aviso | null> => {
+  try {
+    const supabase = crearClientePublico();
+    const { data } = await supabase
+      .from("avisos")
+      .select("id, texto, enlace_texto, enlace_href, tono")
+      .order("orden")
+      .order("creado_en", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    return data ?? null;
+  } catch {
+    // Un aviso es prescindible: si la base no responde, la tienda sigue.
+    return null;
+  }
+});

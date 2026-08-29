@@ -1,4 +1,5 @@
 import { Encabezado } from "@/components/layout/encabezado";
+import { AvisoTienda } from "@/components/tienda/aviso";
 import { Pie } from "@/components/layout/pie";
 import { HidratarCarrito } from "@/lib/carrito/hidratar";
 
@@ -37,6 +38,7 @@ export default async function LayoutTienda({ children }: LayoutProps<"/">) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(IDENTIDAD) }}
       />
       <HidratarCarrito />
+      <AvisoTienda />
       <Encabezado />
       <main id="contenido" className="flex-1">
         {children}
