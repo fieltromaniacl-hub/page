@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { FormularioPersonalizacion } from "@/components/tienda/formulario-personalizacion";
+import { EnlaceWhatsapp } from "@/components/tienda/enlace-whatsapp";
 import { Galeria } from "@/components/tienda/galeria";
 import { InsigniaDisponibilidad } from "@/components/tienda/insignias";
 import {
@@ -225,6 +226,15 @@ export default async function FichaProducto({
             No se paga nada en el sitio. Recibimos tu pedido, te escribimos y
             acordamos contigo el pago y la entrega.
           </p>
+
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <p className="text-sm text-ink-muted">¿Tienes alguna duda?</p>
+            <EnlaceWhatsapp
+              mensaje={`Hola, tengo una consulta sobre «${producto.nombre}».`}
+            >
+              Pregúntanos
+            </EnlaceWhatsapp>
+          </div>
         </div>
       </div>
 

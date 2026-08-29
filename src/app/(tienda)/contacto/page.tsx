@@ -1,6 +1,7 @@
-import { Mail, MessageCircle } from "lucide-react";
+import { Mail } from "lucide-react";
 import type { Metadata } from "next";
 
+import { EnlaceWhatsapp } from "@/components/tienda/enlace-whatsapp";
 import { Bloque, PaginaContenido } from "@/components/tienda/pagina-contenido";
 
 export const metadata: Metadata = {
@@ -13,25 +14,18 @@ export const metadata: Metadata = {
 const CORREO = "fieltromania.cl@gmail.com";
 
 export default function Contacto() {
-  const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP;
-
   return (
     <PaginaContenido
       titulo="Hablemos"
       bajada="Cuéntanos la edad del niño y qué buscas, y te ayudamos a elegir. Respondemos en horario hábil."
     >
       <div className="flex flex-wrap gap-3">
-        {whatsapp ? (
-          <a
-            href={`https://wa.me/${whatsapp}`}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex min-h-12 items-center gap-2 rounded-control border-2 border-line bg-naranja px-5 font-display font-bold text-[oklch(0.17_0.022_292)]"
-          >
-            <MessageCircle className="size-5" aria-hidden="true" />
-            WhatsApp
-          </a>
-        ) : null}
+        <EnlaceWhatsapp
+          variante="fuerte"
+          mensaje="Hola, vengo del sitio y quiero hacer una consulta."
+        >
+          Escribirnos por WhatsApp
+        </EnlaceWhatsapp>
 
         <a
           href={`mailto:${CORREO}`}

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useActionState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 
+import { EnlaceWhatsapp } from "@/components/tienda/enlace-whatsapp";
 import { subtotal, usarCarrito } from "@/lib/carrito/tienda";
 import { crearPedido, type EstadoPedido } from "@/lib/acciones/pedido";
 import { REGIONES } from "@/lib/regiones";
@@ -29,7 +30,6 @@ function BotonEnviar() {
 
 function Confirmacion({ numero }: { numero: string }) {
   const vaciar = usarCarrito((e) => e.vaciar);
-  const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP;
 
   // El carrito se vacía una vez confirmado el pedido, no antes: si el envío
   // hubiera fallado, la persona conserva lo que había armado.
@@ -59,16 +59,12 @@ function Confirmacion({ numero }: { numero: string }) {
       </p>
 
       <div className="mt-8 flex flex-wrap justify-center gap-3">
-        {whatsapp ? (
-          <a
-            href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(`Hola, acabo de hacer el pedido ${numero} en el sitio.`)}`}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex min-h-12 items-center rounded-control border-2 border-line bg-naranja px-5 font-display font-bold text-[oklch(0.17_0.022_292)]"
-          >
-            Escribirnos por WhatsApp
-          </a>
-        ) : null}
+        <EnlaceWhatsapp
+          variante="fuerte"
+          mensaje={`Hola, acabo de hacer el pedido ${numero} en el sitio.`}
+        >
+          Escribirnos por WhatsApp
+        </EnlaceWhatsapp>
         <Link
           href="/productos"
           className="inline-flex min-h-12 items-center rounded-control border-2 border-line bg-surface px-5 font-display font-bold"

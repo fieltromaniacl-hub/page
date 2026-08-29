@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { LogoConNombre } from "@/components/marca/logo";
+import { EnlacesSociales } from "@/components/tienda/enlaces-sociales";
 
 const COLUMNAS = [
   {
@@ -35,24 +36,17 @@ export function Pie() {
               de 1 a 7 años. Juegos educativos y sostenibles para cada etapa del
               desarrollo.
             </p>
-            <div className="mt-5 flex flex-wrap gap-3">
+            <EnlacesSociales className="mt-5" />
+
+            <p className="mt-4 text-sm text-ink-muted">
+              ¿Dudas sobre qué elegir?{" "}
               <a
-                href="https://www.facebook.com/fieltromania.cl"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex min-h-11 items-center rounded-control border-2 border-line bg-surface px-4 font-medium text-ink transition-colors hover:bg-violeta-tenue"
+                href="mailto:fieltromania.cl@gmail.com"
+                className="font-semibold text-violeta-txt underline underline-offset-2"
               >
-                Facebook
+                fieltromania.cl@gmail.com
               </a>
-              <a
-                href="https://www.instagram.com/fieltromania_chile/"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex min-h-11 items-center rounded-control border-2 border-line bg-surface px-4 font-medium text-ink transition-colors hover:bg-violeta-tenue"
-              >
-                Instagram
-              </a>
-            </div>
+            </p>
           </div>
 
           {COLUMNAS.map((columna) => (
