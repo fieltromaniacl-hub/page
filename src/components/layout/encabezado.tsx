@@ -2,6 +2,7 @@
 
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { LogoConNombre } from "@/components/marca/logo";
@@ -10,14 +11,23 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const NAVEGACION = [
-  { href: "/productos?categoria=libros-personalizados", texto: "Libros" },
   { href: "/productos", texto: "Catálogo" },
   { href: "/como-funciona", texto: "Cómo funciona" },
   { href: "/nosotros", texto: "Quiénes somos" },
+  { href: "/contacto", texto: "Contacto" },
 ];
 
 export function Encabezado() {
   const [abierto, setAbierto] = useState(false);
+  const ruta = usePathname();
+
+  /**
+   * Marca la sección actual. Se compara solo la ruta, sin parámetros: leerlos
+   * obligaría a renderizar el encabezado en el servidor en cada visita y el
+   * sitio entero dejaría de ser estático.
+   */
+  const esActivo = (href: string) =>
+    href === "/productos" ? ruta.startsWith("/productos") : ruta === href;
 
   return (
     <header className="sticky top-0 z-[var(--z-sticky)] border-b-[3px] border-line bg-bg/95 backdrop-blur-sm">
@@ -32,16 +42,25 @@ export function Encabezado() {
 
         <nav aria-label="Principal" className="ml-auto hidden lg:block">
           <ul className="flex items-center gap-1">
-            {NAVEGACION.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="inline-flex min-h-11 items-center rounded-control px-3 font-medium text-ink transition-colors duration-150 hover:bg-violeta-tenue hover:text-violeta-txt"
-                >
-                  {item.texto}
-                </Link>
-              </li>
-            ))}
+            {NAVEGACION.map((item) => {
+              const activo = esActivo(item.href);
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    aria-current={activo ? "page" : undefined}
+                    className={cn(
+                      "inline-flex min-h-11 items-center rounded-control px-3 font-medium transition-colors duration-150",
+                      activo
+                        ? "bg-violeta-tenue text-violeta-txt"
+                        : "text-ink hover:bg-violeta-tenue hover:text-violeta-txt",
+                    )}
+                  >
+                    {item.texto}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
@@ -79,7 +98,11 @@ export function Encabezado() {
                 <Link
                   href={item.href}
                   onClick={() => setAbierto(false)}
-                  className="flex min-h-14 items-center font-display text-lg font-bold tracking-tight text-ink"
+                  aria-current={esActivo(item.href) ? "page" : undefined}
+                  className={cn(
+                    "flex min-h-14 items-center font-display text-lg font-bold tracking-tight",
+                    esActivo(item.href) ? "text-violeta-txt" : "text-ink",
+                  )}
                 >
                   {item.texto}
                 </Link>

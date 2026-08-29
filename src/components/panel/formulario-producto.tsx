@@ -311,19 +311,25 @@ export function FormularioProducto({
           </Campo>
         </div>
 
-        <label className="flex min-h-11 items-center gap-3">
-          <input
-            type="checkbox"
-            name="destacado"
-            defaultChecked={
-              estado.valores
-                ? estado.valores.destacado === "true"
-                : (producto?.destacado ?? false)
-            }
-            className="size-5 shrink-0 rounded border-line-soft accent-[var(--violeta)]"
-          />
-          <span className="text-sm font-semibold">Mostrar en la portada</span>
-        </label>
+        <div className="grid gap-1.5">
+          <label className="flex min-h-11 items-center gap-3">
+            <input
+              type="checkbox"
+              name="destacado"
+              defaultChecked={
+                estado.valores
+                  ? estado.valores.destacado === "true"
+                  : (producto?.destacado ?? false)
+              }
+              className="size-5 shrink-0 rounded border-line-soft accent-[var(--violeta)]"
+            />
+            <span className="text-sm font-semibold">Priorizar en la portada</span>
+          </label>
+          <p className="text-sm text-ink-muted">
+            La portada muestra tres productos. Los marcados aquí van primero; si
+            no alcanzan, se completa con los más recientes.
+          </p>
+        </div>
       </Seccion>
 
       <Seccion

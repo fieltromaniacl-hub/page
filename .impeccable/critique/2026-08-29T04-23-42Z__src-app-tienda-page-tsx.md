@@ -159,3 +159,29 @@ El público compra en el teléfono. En 390px de ancho, el orden es: título, pá
 - Si alguien ve **solo la primera pantalla** en su teléfono y nada más, ¿sabe qué vendes? Hoy sabe que vendes algo hecho a mano con un nombre bordado, pero no qué aspecto tiene.
 - ¿La portada debería ser una página de marca con enlace al catálogo, o directamente el catálogo con una cabecera de marca? Para un taller con 20 productos, la segunda opción suele convertir mejor.
 - Las tarjetas de edad son la mejor idea de la página. ¿Por qué no son el punto de entrada principal en vez de un botón genérico que dice «Ver los libros»?
+
+
+---
+
+## Seguimiento — correcciones aplicadas el 2026-08-29
+
+Se arreglaron los seis hallazgos que no dependían del catálogo vacío. Los que sí
+dependían quedan pendientes de que se carguen productos y fotos.
+
+| Hallazgo | Estado |
+|---|---|
+| [P0] `obtenerDestacados()` sin llamador | **Resuelto.** La portada tiene sección de destacados. La consulta ahora ordena por destacado y rellena con lo más reciente, así la casilla del panel prioriza en vez de ser el único camino; una tienda con productos nunca muestra portada vacía por olvidar marcarlos. La casilla pasó a llamarse «Priorizar en la portada» con su explicación. |
+| [P1] Sin dónde recibir fotografía | **Resuelto.** La sección de destacados muestra fotos reales de producto en cuanto se publique el catálogo. |
+| [P1] Banda de garantías genérica | **Resuelto.** Se rompió la simetría: «Lleva su nombre» pasa a ser la afirmación grande, con las otras dos como lista compacta al costado. |
+| [P2] Tarjetas de edad sin enlace | **Resuelto.** Enlazan a `/productos?edad=1-2`, etc. Se añadió filtro por rango con semántica de solape: un libro de 3-6 años ahora aparece en «5 a 7», que con la comprobación de edad puntual no aparecía. |
+| [P2] Falta `aria-current` | **Resuelto.** Con estado visual además. De paso se quitó el enlace duplicado del menú: «Libros» y «Catálogo» iban al mismo destino. Ahora hay cuatro destinos distintos. |
+| [P2] Ilustración bajo los botones en móvil | **Resuelto.** La escena va primero y se achicó a 17rem; el botón principal queda completo dentro de la primera pantalla y a ancho completo, al alcance del pulgar. |
+
+También se atendieron dos observaciones menores: el aviso de «no se paga nada»
+pasó de letra chica a bloque con trazo, y la sección de cierre dejó de repetir
+los destinos de la portada — ahora ofrece una recomendación por WhatsApp.
+
+**Pendiente, bloqueado en el catálogo:** fotografía propia en la primera
+pantalla y la validación de que un visitante nuevo entienda el producto sin
+tener que confiar. Conviene volver a correr la crítica cuando haya productos
+publicados; las heurísticas 6 y 7 deberían subir de 2 a 3 o 4.

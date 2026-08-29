@@ -53,13 +53,20 @@ export default async function Catalogo({
   const params = await searchParams;
   const categoria = typeof params.categoria === "string" ? params.categoria : undefined;
   const edadTexto = typeof params.edad === "string" ? params.edad : undefined;
-  const edad = edadTexto ? Number(edadTexto) : undefined;
+
+  // `edad` acepta una edad suelta («3») o un rango («1-2»), que es lo que
+  // enlazan las tarjetas de etapa de la portada.
+  const [desdeTexto, hastaTexto] = (edadTexto ?? "").split("-");
+  const desde = Number(desdeTexto);
+  const hasta = hastaTexto === undefined ? desde : Number(hastaTexto);
+  const rangoValido = Number.isFinite(desde) && Number.isFinite(hasta);
 
   const [categorias, productos] = await Promise.all([
     obtenerCategorias(),
     obtenerProductos({
       categoria,
-      edad: Number.isFinite(edad) ? edad : undefined,
+      edad: rangoValido ? desde : undefined,
+      edadHasta: rangoValido ? hasta : undefined,
     }),
   ]);
 

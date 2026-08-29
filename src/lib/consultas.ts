@@ -30,9 +30,12 @@ export async function obtenerCategorias() {
 export async function obtenerProductos({
   categoria,
   edad,
+  edadHasta,
 }: {
   categoria?: string;
+  /** Edad exacta, o inicio del rango si viene `edadHasta`. */
   edad?: number;
+  edadHasta?: number;
 } = {}) {
   const supabase = crearClientePublico();
 
@@ -54,21 +57,36 @@ export async function obtenerProductos({
   const productos = data as unknown as ProductoTarjeta[];
   if (edad === undefined) return productos;
 
+  // Se busca *solape* entre el rango del producto y el rango pedido, no que el
+  // producto contenga una edad puntual. Con una etapa de «5 a 7 años», un libro
+  // para 6-7 tiene que aparecer, y con la comprobación puntual no aparecía.
+  const desde = edad;
+  const hasta = edadHasta ?? edad;
+
   return productos.filter(
     (p) =>
-      (p.edad_min === null || p.edad_min <= edad) &&
-      (p.edad_max === null || p.edad_max >= edad),
+      (p.edad_max === null || p.edad_max >= desde) &&
+      (p.edad_min === null || p.edad_min <= hasta),
   );
 }
 
+/**
+ * Productos para la portada.
+ *
+ * Los marcados como destacados van primero; si no alcanzan para llenar el
+ * espacio, se completa con los más recientes. Así la casilla «Mostrar en la
+ * portada» del panel *prioriza* en vez de ser el único camino: una tienda con
+ * productos nunca muestra una portada vacía por haber olvidado marcarlos.
+ */
 export async function obtenerDestacados(limite = 3) {
   const supabase = crearClientePublico();
   const { data } = await supabase
     .from("productos")
     .select(CAMPOS_TARJETA)
     .eq("estado", "activo")
-    .eq("destacado", true)
+    .order("destacado", { ascending: false })
     .order("orden")
+    .order("creado_en", { ascending: false })
     .limit(limite);
   return (data ?? []) as unknown as ProductoTarjeta[];
 }
