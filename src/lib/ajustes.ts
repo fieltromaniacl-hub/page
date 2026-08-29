@@ -197,6 +197,29 @@ export const AJUSTES = {
     porDefecto:
       "Dinos la edad del niño y qué le gusta, y te recomendamos el libro que le va a durar más tiempo. Respondemos por WhatsApp.",
   },
+
+  // ── Cómo funciona ───────────────────────────────────────────────────────
+  comofunciona_titulo: {
+    etiqueta: "Título de «Cómo funciona el pedido»",
+    ayuda:
+      "Encabeza la página que explica el proceso. Los pasos en sí se editan en Portada, y son los mismos que resume la página de inicio.",
+    tipo: "texto",
+    grupo: "Cómo funciona",
+    dondeSeVe: "Página /como-funciona",
+    maxLargo: 80,
+    porDefecto: "Es un encargo, no una compra al paso",
+  },
+
+  comofunciona_bajada: {
+    etiqueta: "Texto de «Cómo funciona el pedido»",
+    ayuda: "Una o dos líneas antes de los pasos.",
+    tipo: "parrafo",
+    grupo: "Cómo funciona",
+    dondeSeVe: "Página /como-funciona",
+    maxLargo: 240,
+    porDefecto:
+      "Todo lo que vendemos se hace a mano después de que lo pides. Por eso conversamos contigo antes de cobrar nada.",
+  },
 } as const satisfies Record<string, DefinicionAjuste>;
 
 export type ClaveAjuste = keyof typeof AJUSTES;
