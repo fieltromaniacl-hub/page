@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { FormularioProducto } from "@/components/panel/formulario-producto";
 import { GestorCampos } from "@/components/panel/gestor-campos";
 import { GestorImagenes } from "@/components/panel/gestor-imagenes";
+import { GestorIncluye } from "@/components/panel/gestor-incluye";
 import { eliminarProducto } from "@/lib/acciones/productos";
 import { crearClienteServidor } from "@/lib/supabase/servidor";
 
@@ -19,8 +20,14 @@ export default async function EditarProducto({
 
   const supabase = await crearClienteServidor();
 
-  const [{ data: producto }, { data: categorias }, { data: imagenes }, { data: campos }] =
-    await Promise.all([
+  const [
+    { data: producto },
+    { data: categorias },
+    { data: imagenes },
+    { data: campos },
+    { data: incluye },
+    { data: candidatos },
+  ] = await Promise.all([
       supabase.from("productos").select("*").eq("id", id).maybeSingle(),
       supabase.from("categorias").select("id, nombre").order("orden"),
       supabase
@@ -33,6 +40,19 @@ export default async function EditarProducto({
         .select("id, etiqueta, ayuda, tipo, opciones, requerido, max_largo, orden")
         .eq("producto_id", id)
         .order("orden"),
+      supabase
+        .from("producto_incluye")
+        .select("incluido_id, cantidad, orden, incluido:productos!producto_incluye_incluido_id_fkey(nombre, precio, estado)")
+        .eq("producto_id", id)
+        .order("orden"),
+      // Candidatos: todo lo que no está archivado. La base rechaza los packs y
+      // lo ya incluido, así que aquí no hace falta repetir esa regla.
+      supabase
+        .from("productos")
+        .select("id, nombre, precio")
+        .neq("estado", "archivado")
+        .neq("id", id)
+        .order("nombre"),
     ]);
 
   if (!producto) notFound();
@@ -78,6 +98,20 @@ export default async function EditarProducto({
       <div className="-mt-20 grid gap-5">
         <GestorImagenes productoId={producto.id} imagenes={imagenes ?? []} />
         <GestorCampos productoId={producto.id} campos={campos ?? []} />
+
+        <GestorIncluye
+          productoId={producto.id}
+          slug={producto.slug}
+          precio={producto.precio}
+          incluye={(incluye ?? []).map((i) => ({
+            incluido_id: i.incluido_id,
+            cantidad: i.cantidad,
+            nombre: i.incluido?.nombre ?? "(producto borrado)",
+            precio: i.incluido?.precio ?? 0,
+            publicado: i.incluido?.estado === "activo",
+          }))}
+          candidatos={candidatos ?? []}
+        />
 
         <section className="rounded-card border border-alerta/30 bg-surface p-5">
           <h2 className="text-base font-bold tracking-tight">Eliminar</h2>

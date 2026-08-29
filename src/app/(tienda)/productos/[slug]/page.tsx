@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -10,6 +11,7 @@ import {
   obtenerProducto,
   obtenerSlugsDeProductos,
   rangoEdad,
+  valorPorSeparado,
 } from "@/lib/consultas";
 import { obtenerAjustes } from "@/lib/contenido";
 import { formatearPrecio, urlSitio } from "@/lib/utils";
@@ -64,6 +66,13 @@ export default async function FichaProducto({
   if (!producto) notFound();
 
   const edad = rangoEdad(producto.edad_min, producto.edad_max);
+
+  // Un producto con componentes es un pack. El ahorro se muestra solo si el
+  // conjunto sale más barato: si ella pone un precio mayor, decirlo sería
+  // una promesa falsa.
+  const incluye = producto.producto_incluye ?? [];
+  const suelto = valorPorSeparado(incluye);
+  const ahorro = suelto > producto.precio ? suelto - producto.precio : 0;
   const portada = producto.producto_imagenes[0] ?? null;
 
   const disponibilidadSchema =
@@ -93,6 +102,17 @@ export default async function FichaProducto({
           suggestedMinAge: producto.edad_min ?? undefined,
           suggestedMaxAge: producto.edad_max ?? undefined,
         }
+      : undefined,
+    // Un pack se declara como tal: Google y los asistentes entienden
+    // `isRelatedTo` como «esto viene con aquello».
+    isRelatedTo: incluye.length
+      ? incluye
+          .filter((i) => i.incluido)
+          .map((i) => ({
+            "@type": "Product",
+            name: i.incluido!.nombre,
+            url: `${urlSitio()}/productos/${i.incluido!.slug}`,
+          }))
       : undefined,
     offers: {
       "@type": "Offer",
@@ -145,15 +165,15 @@ export default async function FichaProducto({
       />
 
       <nav aria-label="Migas de pan" className="text-sm">
-        <ol className="flex flex-wrap items-center gap-1.5 text-ink-muted">
+        <ol className="-ml-2 flex flex-wrap items-center text-ink-muted">
           <li>
-            <Link href="/" className="hover:text-violeta-txt hover:underline">
+            <Link href="/" className="inline-flex min-h-11 items-center px-2 hover:text-violeta-txt hover:underline">
               Inicio
             </Link>
           </li>
           <li aria-hidden="true">/</li>
           <li>
-            <Link href="/productos" className="hover:text-violeta-txt hover:underline">
+            <Link href="/productos" className="inline-flex min-h-11 items-center px-2 hover:text-violeta-txt hover:underline">
               Catálogo
             </Link>
           </li>
@@ -163,7 +183,7 @@ export default async function FichaProducto({
               <li>
                 <Link
                   href={`/productos?categoria=${producto.categorias.slug}`}
-                  className="hover:text-violeta-txt hover:underline"
+                  className="inline-flex min-h-11 items-center px-2 hover:text-violeta-txt hover:underline"
                 >
                   {producto.categorias.nombre}
                 </Link>
@@ -205,11 +225,67 @@ export default async function FichaProducto({
             <InsigniaDisponibilidad stock={producto.stock} />
           </div>
 
+          {ahorro > 0 ? (
+            <p className="mt-2 text-sm">
+              <span className="text-ink-muted line-through tabular-nums">
+                {formatearPrecio(suelto)}
+              </span>{" "}
+              <span className="font-semibold text-verde-txt">
+                por separado · ahorras {formatearPrecio(ahorro)}
+              </span>
+            </p>
+          ) : null}
+
           {producto.dias_confeccion ? (
             <p className="mt-2 text-sm text-ink-muted">
               Se confecciona en aproximadamente {producto.dias_confeccion} días
               desde que acordamos el pedido.
             </p>
+          ) : null}
+
+          {incluye.length ? (
+            <section className="mt-6" aria-labelledby="titulo-incluye">
+              <h2
+                id="titulo-incluye"
+                className="font-display text-lg font-bold tracking-tight"
+              >
+                Qué incluye
+              </h2>
+              <ul className="mt-3 grid gap-2">
+                {incluye.map((item) =>
+                  item.incluido ? (
+                    <li key={item.incluido.id}>
+                      <Link
+                        href={`/productos/${item.incluido.slug}`}
+                        className="flex items-center gap-3 rounded-control border-2 border-line bg-surface p-2 transition-[translate,box-shadow] duration-200 ease-[var(--ease-salida)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-solida motion-reduce:hover:translate-x-0 motion-reduce:hover:translate-y-0"
+                      >
+                        <span className="relative size-12 shrink-0 overflow-hidden rounded-control border-2 border-line bg-surface-2">
+                          {item.incluido.producto_imagenes[0] ? (
+                            <Image
+                              src={item.incluido.producto_imagenes[0].url}
+                              alt=""
+                              fill
+                              sizes="3rem"
+                              className="object-cover"
+                            />
+                          ) : null}
+                        </span>
+                        <span className="min-w-0 flex-1 font-semibold">
+                          {item.cantidad > 1 ? `${item.cantidad} × ` : ""}
+                          {item.incluido.nombre}
+                        </span>
+                        <span className="shrink-0 text-sm text-ink-muted tabular-nums">
+                          {formatearPrecio(item.incluido.precio)}
+                        </span>
+                      </Link>
+                    </li>
+                  ) : null,
+                )}
+              </ul>
+              <p className="mt-3 text-sm text-ink-muted">
+                Se personaliza una sola vez y llega todo junto.
+              </p>
+            </section>
           ) : null}
 
           <hr className="my-7 border-t-2 border-line-soft" />

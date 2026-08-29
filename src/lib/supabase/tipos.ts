@@ -426,6 +426,42 @@ export type Database = {
           },
         ]
       }
+      producto_incluye: {
+        Row: {
+          cantidad: number
+          incluido_id: string
+          orden: number
+          producto_id: string
+        }
+        Insert: {
+          cantidad?: number
+          incluido_id: string
+          orden?: number
+          producto_id: string
+        }
+        Update: {
+          cantidad?: number
+          incluido_id?: string
+          orden?: number
+          producto_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "producto_incluye_incluido_id_fkey"
+            columns: ["incluido_id"]
+            isOneToOne: false
+            referencedRelation: "productos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "producto_incluye_producto_id_fkey"
+            columns: ["producto_id"]
+            isOneToOne: false
+            referencedRelation: "productos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       productos: {
         Row: {
           actualizado_en: string

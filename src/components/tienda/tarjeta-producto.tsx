@@ -73,10 +73,16 @@ export function TarjetaProducto({
             ) : null}
           </div>
 
-          <InsigniaDisponibilidad
-            stock={producto.stock}
-            className="mt-3 self-start"
-          />
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {/* Un producto con componentes es un pack: conviene decirlo en la
+                tarjeta, porque explica por qué cuesta más que sus vecinos. */}
+            {producto.producto_incluye?.length ? (
+              <span className="inline-flex items-center rounded-pill border-2 border-line bg-naranja-tenue px-3 py-0.5 font-display text-xs font-bold whitespace-nowrap text-naranja-txt">
+                Pack de {producto.producto_incluye.length}
+              </span>
+            ) : null}
+            <InsigniaDisponibilidad stock={producto.stock} />
+          </div>
         </div>
       </Link>
     </article>
