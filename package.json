@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "db:push": "./scripts/db.sh push",
-    "db:tipos": "./scripts/db.sh tipos"
+    "db:tipos": "./scripts/db.sh tipos",
+    "admin:crear": "node scripts/crear-admin.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
