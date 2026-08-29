@@ -1,5 +1,6 @@
 import { obtenerCategorias, obtenerProductos, rangoEdad } from "@/lib/consultas";
 import { formatearPrecio, urlSitio } from "@/lib/utils";
+import { REDES } from "@/lib/redes";
 
 const SITIO = urlSitio();
 
@@ -90,8 +91,7 @@ ${listado || "El catálogo se está preparando. Aún no hay productos publicados
 ## Contacto
 
 - Correo: fieltromania.cl@gmail.com
-- Facebook: https://www.facebook.com/fieltromania.cl
-- Instagram: https://www.instagram.com/fieltromania_chile/
+${REDES.map((r) => `- ${r.nombre}: ${r.href}`).join("\n")}
 `;
 
   return new Response(texto, {

@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { EnlaceWhatsapp } from "@/components/tienda/enlace-whatsapp";
 import { Bloque, PaginaContenido } from "@/components/tienda/pagina-contenido";
 import { obtenerAjustes } from "@/lib/contenido";
+import { REDES } from "@/lib/redes";
 
 export const metadata: Metadata = {
   title: "Contacto",
@@ -41,23 +42,19 @@ export default async function Contacto() {
       <Bloque titulo="Redes">
         <p>
           Publicamos lo que sale del taller en{" "}
-          <a
-            href="https://www.facebook.com/fieltromania.cl"
-            target="_blank"
-            rel="noreferrer"
-            className="font-semibold text-violeta-txt underline underline-offset-2"
-          >
-            Facebook
-          </a>{" "}
-          e{" "}
-          <a
-            href="https://www.instagram.com/fieltromania_chile/"
-            target="_blank"
-            rel="noreferrer"
-            className="font-semibold text-violeta-txt underline underline-offset-2"
-          >
-            Instagram
-          </a>
+          {REDES.map((red, i) => (
+            <span key={red.nombre}>
+              {i > 0 ? (i === REDES.length - 1 ? " y " : ", ") : ""}
+              <a
+                href={red.href}
+                target="_blank"
+                rel="noreferrer"
+                className="font-semibold text-violeta-txt underline underline-offset-2"
+              >
+                {red.nombre}
+              </a>
+            </span>
+          ))}
           . Por ahí también puedes escribirnos.
         </p>
       </Bloque>

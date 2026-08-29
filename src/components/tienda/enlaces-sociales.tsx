@@ -2,32 +2,26 @@ import {
   IconoFacebook,
   IconoInstagram,
   IconoWhatsapp,
+  IconoYoutube,
 } from "@/components/marca/iconos-redes";
+import { REDES } from "@/lib/redes";
 import { cn } from "@/lib/utils";
 
-const REDES = [
-  {
-    nombre: "Facebook",
-    href: "https://www.facebook.com/fieltromania.cl",
-    Icono: IconoFacebook,
-    // Etiqueta explícita: un icono solo no le dice nada a un lector de
-    // pantalla, y «Facebook» a secas no dice qué pasa al pulsarlo.
-    etiqueta: "Fieltromanía en Facebook",
-  },
-  {
-    nombre: "Instagram",
-    href: "https://www.instagram.com/fieltromania_chile/",
-    Icono: IconoInstagram,
-    etiqueta: "Fieltromanía en Instagram",
-  },
-];
+/** El icono de cada red, emparejado por nombre con la lista de `lib/redes`. */
+const ICONOS: Record<string, typeof IconoFacebook> = {
+  Facebook: IconoFacebook,
+  Instagram: IconoInstagram,
+  YouTube: IconoYoutube,
+};
 
 export function EnlacesSociales({ className }: { className?: string }) {
   const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP;
 
   return (
     <ul className={cn("flex flex-wrap items-center gap-2.5", className)}>
-      {REDES.map(({ nombre, href, Icono, etiqueta }) => (
+      {REDES.map(({ nombre, href, etiqueta }) => {
+        const Icono = ICONOS[nombre];
+        return (
         <li key={nombre}>
           <a
             href={href}
@@ -40,7 +34,8 @@ export function EnlacesSociales({ className }: { className?: string }) {
             <Icono className="size-5" />
           </a>
         </li>
-      ))}
+        );
+      })}
 
       {whatsapp ? (
         <li>

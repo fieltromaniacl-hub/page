@@ -4,6 +4,7 @@ import { Pie } from "@/components/layout/pie";
 import { HidratarCarrito } from "@/lib/carrito/hidratar";
 
 import { obtenerAjustes } from "@/lib/contenido";
+import { DIRECCIONES_DE_REDES } from "@/lib/redes";
 import { urlSitio } from "@/lib/utils";
 
 const SITIO = urlSitio();
@@ -21,10 +22,7 @@ const identidadDe = (email: string) => ({
     "Taller chileno de libros de fieltro artesanales y juguetes educativos personalizados para niños de 1 a 7 años.",
   areaServed: { "@type": "Country", name: "Chile" },
   email,
-  sameAs: [
-    "https://www.facebook.com/fieltromania.cl",
-    "https://www.instagram.com/fieltromania_chile/",
-  ],
+  sameAs: DIRECCIONES_DE_REDES,
 });
 
 export default async function LayoutTienda({ children }: LayoutProps<"/">) {
