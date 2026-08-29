@@ -6,6 +6,7 @@ import { EnlaceWhatsapp } from "@/components/tienda/enlace-whatsapp";
 import { TarjetaProducto } from "@/components/tienda/tarjeta-producto";
 import { botonVariants } from "@/components/ui/boton";
 import { obtenerDestacados } from "@/lib/consultas";
+import { obtenerAjustes } from "@/lib/contenido";
 import { cn } from "@/lib/utils";
 
 // La portada muestra productos, así que se regenera con el catálogo.
@@ -60,7 +61,10 @@ const PASOS = [
 ];
 
 export default async function Inicio() {
-  const destacados = await obtenerDestacados(3);
+  const [destacados, ajustes] = await Promise.all([
+    obtenerDestacados(3),
+    obtenerAjustes(),
+  ]);
 
   return (
     <>
@@ -108,8 +112,7 @@ export default async function Inicio() {
 
           {/* Es la objeción más cara del negocio: merece peso, no letra chica. */}
           <p className="mt-5 rounded-control border-2 border-line bg-surface-2 px-4 py-3 font-medium">
-            No se paga nada por adelantado. Recibimos tu pedido, te escribimos y
-            acordamos contigo el pago y la entrega.
+            {ajustes.pago_promesa}
           </p>
         </div>
       </section>

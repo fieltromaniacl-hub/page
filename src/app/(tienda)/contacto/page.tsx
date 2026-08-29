@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 
 import { EnlaceWhatsapp } from "@/components/tienda/enlace-whatsapp";
 import { Bloque, PaginaContenido } from "@/components/tienda/pagina-contenido";
+import { obtenerAjustes } from "@/lib/contenido";
 
 export const metadata: Metadata = {
   title: "Contacto",
@@ -11,13 +12,14 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contacto" },
 };
 
-const CORREO = "fieltromania.cl@gmail.com";
+export default async function Contacto() {
+  const ajustes = await obtenerAjustes();
+  const CORREO = ajustes.contacto_email;
 
-export default function Contacto() {
   return (
     <PaginaContenido
       titulo="Hablemos"
-      bajada="Cuéntanos la edad del niño y qué buscas, y te ayudamos a elegir. Respondemos en horario hábil."
+      bajada={`Cuéntanos la edad del niño y qué buscas, y te ayudamos a elegir. ${ajustes.contacto_horario}`}
     >
       <div className="flex flex-wrap gap-3">
         <EnlaceWhatsapp

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { PaginaCarrito } from "@/components/tienda/pagina-carrito";
+import { obtenerAjustes } from "@/lib/contenido";
 
 export const metadata: Metadata = {
   title: "Tu pedido",
@@ -8,10 +9,15 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
 };
 
-export default function Carrito() {
+export default async function Carrito() {
+  const ajustes = await obtenerAjustes();
+
   return (
     <div className="mx-auto max-w-[76rem] px-4 py-10 sm:px-6 lg:py-14">
-      <PaginaCarrito />
+      <PaginaCarrito
+        promesaDePago={ajustes.pago_promesa}
+        notaDeDespacho={ajustes.despacho_nota}
+      />
     </div>
   );
 }

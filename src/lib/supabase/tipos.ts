@@ -27,6 +27,66 @@ export type Database = {
         }
         Relationships: []
       }
+      ajustes: {
+        Row: {
+          actualizado_en: string
+          clave: string
+          valor: string
+        }
+        Insert: {
+          actualizado_en?: string
+          clave: string
+          valor?: string
+        }
+        Update: {
+          actualizado_en?: string
+          clave?: string
+          valor?: string
+        }
+        Relationships: []
+      }
+      avisos: {
+        Row: {
+          activo: boolean
+          actualizado_en: string
+          creado_en: string
+          desde: string | null
+          enlace_href: string | null
+          enlace_texto: string | null
+          hasta: string | null
+          id: string
+          orden: number
+          texto: string
+          tono: Database["public"]["Enums"]["tono_aviso"]
+        }
+        Insert: {
+          activo?: boolean
+          actualizado_en?: string
+          creado_en?: string
+          desde?: string | null
+          enlace_href?: string | null
+          enlace_texto?: string | null
+          hasta?: string | null
+          id?: string
+          orden?: number
+          texto: string
+          tono?: Database["public"]["Enums"]["tono_aviso"]
+        }
+        Update: {
+          activo?: boolean
+          actualizado_en?: string
+          creado_en?: string
+          desde?: string | null
+          enlace_href?: string | null
+          enlace_texto?: string | null
+          hasta?: string | null
+          id?: string
+          orden?: number
+          texto?: string
+          tono?: Database["public"]["Enums"]["tono_aviso"]
+        }
+        Relationships: []
+      }
       categorias: {
         Row: {
           creado_en: string
@@ -51,6 +111,83 @@ export type Database = {
           nombre?: string
           orden?: number
           slug?: string
+        }
+        Relationships: []
+      }
+      pagina_bloques: {
+        Row: {
+          creado_en: string
+          cuerpo: string
+          id: string
+          orden: number
+          pagina_id: string
+          titulo: string | null
+        }
+        Insert: {
+          creado_en?: string
+          cuerpo?: string
+          id?: string
+          orden?: number
+          pagina_id: string
+          titulo?: string | null
+        }
+        Update: {
+          creado_en?: string
+          cuerpo?: string
+          id?: string
+          orden?: number
+          pagina_id?: string
+          titulo?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pagina_bloques_pagina_id_fkey"
+            columns: ["pagina_id"]
+            isOneToOne: false
+            referencedRelation: "paginas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      paginas: {
+        Row: {
+          actualizado_en: string
+          bajada: string | null
+          creado_en: string
+          del_sistema: boolean
+          id: string
+          orden: number
+          publicada: boolean
+          seo_descripcion: string | null
+          seo_titulo: string | null
+          slug: string
+          titulo: string
+        }
+        Insert: {
+          actualizado_en?: string
+          bajada?: string | null
+          creado_en?: string
+          del_sistema?: boolean
+          id?: string
+          orden?: number
+          publicada?: boolean
+          seo_descripcion?: string | null
+          seo_titulo?: string | null
+          slug: string
+          titulo: string
+        }
+        Update: {
+          actualizado_en?: string
+          bajada?: string | null
+          creado_en?: string
+          del_sistema?: boolean
+          id?: string
+          orden?: number
+          publicada?: boolean
+          seo_descripcion?: string | null
+          seo_titulo?: string | null
+          slug?: string
+          titulo?: string
         }
         Relationships: []
       }
@@ -327,6 +464,7 @@ export type Database = {
     }
     Functions: {
       es_admin: { Args: never; Returns: boolean }
+      hoy_en_chile: { Args: never; Returns: string }
     }
     Enums: {
       estado_pedido:
@@ -340,6 +478,7 @@ export type Database = {
       estado_producto: "activo" | "inactivo" | "archivado"
       estado_stock: "disponible" | "por_encargo" | "agotado"
       tipo_campo: "texto" | "parrafo" | "opcion" | "color" | "numero"
+      tono_aviso: "naranja" | "verde" | "violeta"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -479,6 +618,7 @@ export const Constants = {
       estado_producto: ["activo", "inactivo", "archivado"],
       estado_stock: ["disponible", "por_encargo", "agotado"],
       tipo_campo: ["texto", "parrafo", "opcion", "color", "numero"],
+      tono_aviso: ["naranja", "verde", "violeta"],
     },
   },
 } as const

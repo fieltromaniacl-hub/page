@@ -11,6 +11,7 @@ import {
   obtenerSlugsDeProductos,
   rangoEdad,
 } from "@/lib/consultas";
+import { obtenerAjustes } from "@/lib/contenido";
 import { formatearPrecio, urlSitio } from "@/lib/utils";
 
 export const revalidate = 300;
@@ -55,7 +56,10 @@ export default async function FichaProducto({
   params,
 }: PageProps<"/productos/[slug]">) {
   const { slug } = await params;
-  const producto = await obtenerProducto(slug);
+  const [producto, ajustes] = await Promise.all([
+    obtenerProducto(slug),
+    obtenerAjustes(),
+  ]);
 
   if (!producto) notFound();
 
@@ -223,8 +227,7 @@ export default async function FichaProducto({
           />
 
           <p className="mt-5 rounded-control border-2 border-line bg-surface-2 px-4 py-3 text-sm">
-            No se paga nada en el sitio. Recibimos tu pedido, te escribimos y
-            acordamos contigo el pago y la entrega.
+            {ajustes.pago_promesa}
           </p>
 
           <div className="mt-4 flex flex-wrap items-center gap-3">

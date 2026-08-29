@@ -1,10 +1,12 @@
 "use client";
 
 import {
+  FileText,
   LayoutDashboard,
   LogOut,
   Package,
   ShoppingBag,
+  SlidersHorizontal,
   Store,
   Tags,
 } from "lucide-react";
@@ -20,6 +22,8 @@ const ENLACES = [
   { href: "/admin/pedidos", texto: "Pedidos", Icono: ShoppingBag },
   { href: "/admin/productos", texto: "Productos", Icono: Package },
   { href: "/admin/categorias", texto: "Categorías", Icono: Tags },
+  { href: "/admin/paginas", texto: "Páginas", Icono: FileText },
+  { href: "/admin/ajustes", texto: "Textos", Icono: SlidersHorizontal },
 ];
 
 export function NavegacionPanel({

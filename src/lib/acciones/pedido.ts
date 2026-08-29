@@ -4,6 +4,7 @@ import { Resend } from "resend";
 import { z } from "zod";
 
 import { correoParaCliente, correoParaTaller, type ItemCorreo } from "@/lib/correos/plantillas";
+import { obtenerAjustes } from "@/lib/contenido";
 import { crearClienteAdministrador } from "@/lib/supabase/administrador";
 import { aplanarErrores, type ErroresCampo } from "@/lib/validacion";
 
@@ -158,7 +159,10 @@ export async function crearPedido(
     return { mensaje: "No pudimos guardar el detalle del pedido. Inténtalo otra vez." };
   }
 
+  const ajustes = await obtenerAjustes();
+
   await enviarCorreos({
+    promesaDePago: ajustes.pago_promesa,
     numero: pedido.numero,
     nombre: analisis.data.nombre,
     email: analisis.data.email,

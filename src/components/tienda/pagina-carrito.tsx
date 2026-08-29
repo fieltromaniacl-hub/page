@@ -32,7 +32,13 @@ function BotonEnviar() {
   );
 }
 
-function Confirmacion({ numero }: { numero: string }) {
+function Confirmacion({
+  numero,
+  promesaDePago,
+}: {
+  numero: string;
+  promesaDePago: string;
+}) {
   const vaciar = usarCarrito((e) => e.vaciar);
 
   // El carrito se vacía una vez confirmado el pedido, no antes: si el envío
@@ -57,9 +63,7 @@ function Confirmacion({ numero }: { numero: string }) {
       </p>
 
       <p className="mx-auto mt-4 max-w-[46ch] text-ink-muted">
-        Nos pondremos en contacto contigo para acordar el pago y la entrega.
-        Te enviamos también un correo con el detalle. <strong>No tienes que
-        pagar nada todavía.</strong>
+        Te enviamos un correo con el detalle. {promesaDePago}
       </p>
 
       <div className="mt-8 flex flex-wrap justify-center gap-3">
@@ -80,14 +84,21 @@ function Confirmacion({ numero }: { numero: string }) {
   );
 }
 
-export function PaginaCarrito() {
+export function PaginaCarrito({
+  promesaDePago,
+  notaDeDespacho,
+}: {
+  promesaDePago: string;
+  notaDeDespacho: string;
+}) {
   const items = usarCarrito((e) => e.items);
   const cambiarCantidad = usarCarrito((e) => e.cambiarCantidad);
   const quitar = usarCarrito((e) => e.quitar);
 
   const [estado, accion] = useActionState<EstadoPedido, FormData>(crearPedido, {});
 
-  if (estado.numero) return <Confirmacion numero={estado.numero} />;
+  if (estado.numero)
+    return <Confirmacion numero={estado.numero} promesaDePago={promesaDePago} />;
 
   if (!items.length) {
     return (
@@ -214,9 +225,7 @@ export function PaginaCarrito() {
             {formatearPrecio(total)}
           </p>
         </div>
-        <p className="mt-2 text-sm text-ink-muted">
-          El despacho se cotiza aparte según tu comuna y lo acordamos contigo.
-        </p>
+        <p className="mt-2 text-sm text-ink-muted">{notaDeDespacho}</p>
 
         {/* Un solo anuncio para todo el pedido: cambiar una cantidad decía
             «3» sin más contexto, y había una región viva por cada línea. */}
@@ -354,9 +363,7 @@ export function PaginaCarrito() {
 
           <BotonEnviar />
 
-          <p className="text-center text-sm text-ink-muted">
-            No se paga nada aquí. Te contactamos para acordar el pago y la entrega.
-          </p>
+          <p className="text-center text-sm text-ink-muted">{promesaDePago}</p>
         </form>
       </section>
     </div>

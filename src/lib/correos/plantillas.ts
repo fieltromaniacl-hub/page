@@ -17,6 +17,8 @@ export type DatosCorreo = {
   notas: string | null;
   items: ItemCorreo[];
   total: number;
+  /** El texto de «Pago y entrega» del panel, para no repetirlo aquí. */
+  promesaDePago: string;
 };
 
 /** Escapa el texto que viene del cliente: llega directo a un correo HTML. */
@@ -119,10 +121,7 @@ export function correoParaCliente(d: DatosCorreo) {
 
       <div style="background:#e8f5ee;border-radius:12px;padding:16px;margin-bottom:24px">
         <p style="margin:0;font-weight:700">Nos pondremos en contacto contigo</p>
-        <p style="margin:6px 0 0;font-size:15px">
-          Te escribiremos para acordar la forma de pago y la entrega.
-          <strong>Todav&iacute;a no tienes que pagar nada.</strong>
-        </p>
+        <p style="margin:6px 0 0;font-size:15px">${esc(d.promesaDePago)}</p>
       </div>
 
       <h2 style="font-size:16px;margin:0 0 4px">Lo que pediste</h2>
