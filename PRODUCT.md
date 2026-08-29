@@ -20,6 +20,15 @@ detrás, cuánto demora, cómo se paga.
 Ambos necesitan entender rápido que el producto es **hecho a mano y personalizado**, y por lo tanto
 que no es una compra instantánea sino un encargo con conversación de por medio.
 
+**Interna — la dueña del taller, administrando.** Es la tercera usuaria y la que más horas pasa en
+el sitio. Carga productos entre puntada y puntada, muchas veces desde el teléfono y con las manos
+ocupadas. No es diseñadora ni programadora: el panel tiene que explicarse solo, no perder lo que
+escribió si algo falla, y no obligarla a recordar en qué orden hacer las cosas.
+
+Su trabajo por hacer es doble: *publicar un producto sin fricción* y *atender un pedido sin tener
+que pedirle datos al cliente por mensaje*. Todo lo que el panel no capture bien se convierte
+después en una conversación de WhatsApp que ella tiene que sostener.
+
 ## Product Purpose
 
 Fieltromanía vende libros de fieltro artesanales y personalizados para niños de 1 a 7 años, además
@@ -36,6 +45,11 @@ completo, con los datos de personalización, y abre la conversación con el clie
 
 Éxito es: un pedido que llega con todo lo necesario para empezar a fabricar sin tener que
 preguntar nada por WhatsApp.
+
+El producto tiene **dos superficies con reglas distintas**. La tienda pública comunica: ahí el
+diseño es el producto y puede tomar riesgos. El panel de administración sirve a una tarea: ahí el
+diseño debe desaparecer detrás del trabajo. El registro declarado arriba es el de la superficie
+principal; el panel se diseña con el registro contrario y DESIGN.md documenta cómo se separan.
 
 ## Brand Personality
 
@@ -86,6 +100,10 @@ Añado una quinta por criterio propio:
 5. **Legible para máquinas.** Buscadores y asistentes de IA son un canal de adquisición, no un
    trámite técnico. Contenido en el HTML, datos estructurados en cada producto, texto alternativo
    que describe de verdad.
+
+6. **Nunca perder trabajo de nadie.** Un formulario que se vacía al fallar la validación, un pedido
+   que se pierde porque falló el correo, una foto que se sube pero no se registra: todos son la
+   misma falta. El trabajo de la clienta y el de la dueña se conservan aunque algo más se rompa.
 
 ## Accessibility & Inclusion
 
